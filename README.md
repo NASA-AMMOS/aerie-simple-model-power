@@ -17,7 +17,7 @@ This repo provides a simple Aerie power mission model. Below are the steps on ho
   export JAVA_HOME="/Library/Java/JavaVirtualMachines/temurin-19.jdk/Contents/Home"
   ```
 
-- Ensure you have docker installed on your machine. If you do not, install it [here].(https://docs.docker.com/desktop/)
+- Ensure you have docker installed on your machine. If you do not, install it [here](https://docs.docker.com/desktop/).
 
 - Navigate to a directory on your local machine where you want to keep this repo and clone the repo using the following command:
 
