@@ -17,7 +17,9 @@ public class Mission {
         registrar.discrete("battery.array.angle", battery.array.angle, new DoubleValueMapper());
         registrar.discrete("battery.array.solarInputPower", battery.array.solarInputPower, new DoubleValueMapper());
         registrar.discrete("battery.netPowerW", battery.netPowerW, new DoubleValueMapper());
-        registrar.discrete("battery.batterySOC", battery.batterySOC, new DoubleValueMapper());
+        registrar.discrete("battery.actualNetPowerW", battery.actualNetPowerW, new DoubleValueMapper());
+        //registrar.discrete("battery.batterySOC", battery.batterySOC, new DoubleValueMapper());
+        registrar.real("battery.batterySOC", battery.batterySOC);
         registrar.real("battery.integratedNetPower", battery.integratedNetPower);
     }
 }

@@ -1,19 +1,24 @@
 package genericpowersystem.models.power;
 
+import gov.nasa.jpl.aerie.merlin.framework.ModelActions;
 import gov.nasa.jpl.aerie.merlin.framework.resources.real.RealResource;
 
 public class BatteryModel {
     public double busVoltage;
     public double batteryCapacityAH;
     public double batteryCapacityWH;
-    public DerivedState<Double> netPowerW;   //represents the net power into/out of the battery
+    public DerivedState<Double> actualNetPowerW;  //represents the net power into/out of the battery
+    public DerivedState<Double> netPowerW;   //net power for the computation of batterySOC
     public SettableState<Double> sinkPowerW;   //represents how much power is required by the spacecraft
-    //public RealResource batterySOC;
-    public DerivedState<Double> batterySOC;
-    //public double initialBatteryChargeWH = 0.0;
+    public RealResource batterySOC;
+    //public DerivedState<Double> batterySOC;
+    public double initialBatteryChargeWH = 0.0;
     public double initialBatterySOC;
+    public SettableState<Boolean> batteryFull;
+    public SettableState<Boolean> batteryEmpty;
     public IntegratedState integratedNetPower;
     public GenericSolarArray array;    //solar array that effects the charging of the battery
+    public BatterySOCController controller;
 
     public BatteryModel(double busVoltage, double batteryCapacityAH, double initialBatterySOC) {
         this.busVoltage = busVoltage;
@@ -21,24 +26,32 @@ public class BatteryModel {
         this.batteryCapacityWH = this.batteryCapacityAH * this.busVoltage;
         this.initialBatterySOC = initialBatterySOC;
         //this.initialBatteryChargeWH = convertSOCtoWH(initialBatterySOC);
-        this.sinkPowerW = SettableState.builder(Double.class).initialValue(5.0).build();
+        this.sinkPowerW = SettableState.builder(Double.class).initialValue(0.0).build();
         this.array = new GenericSolarArray(5.0);
-        this.netPowerW = DerivedState.builder(Double.class)
+        this.batteryFull = SettableState.builder(Boolean.class).initialValue(true).build();
+        this.batteryEmpty = SettableState.builder(Boolean.class).initialValue(false).build();
+        this.actualNetPowerW = DerivedState.builder(Double.class)
                 .sourceStates(this.array.solarInputPower, this.sinkPowerW)
                 .valueFunction(this::computeNetPowerW)
+                .build();
+        this.netPowerW = DerivedState.builder(Double.class)
+                .sourceStates(this.array.solarInputPower, this.sinkPowerW, this.batteryFull, this.batteryEmpty)
+                .valueFunction(this::netPowerWBattery)
                 .build();
         this.integratedNetPower = IntegratedState.builder()
                 .integrandState(this.netPowerW)
                 .initialValue(0.0)
                 .build();
-
+/**
         this.batterySOC = DerivedState.builder(Double.class)
                 .sourceStates(this.netPowerW)
                 .valueFunction(this::updateSOC)
                 .build();
+ */
 
-        //this.batterySOC = RealResource.scaleBy(1.0/batteryCapacityWH, this.integratedNetPower).scaledBy(100);
-        //this.batterySOC = updateSOC();
+        this.batterySOC = RealResource.scaleBy(1.0/batteryCapacityWH, this.integratedNetPower).scaledBy(100);
+        this.controller = new BatterySOCController(this);
+        ModelActions.spawn(controller::run);
     }
 
 
@@ -62,30 +75,28 @@ public class BatteryModel {
         return wh;
     }
 
+    public double computeNetPowerW() {
+        return array.solarInputPower.get() - sinkPowerW.get();
+    }
+
 
     //computes the net power based on how much power is required by the spacecraft and how much power is being generated
     //the solar array
     //updates the SOC of the battery after computing the new net power
-    public double computeNetPowerW() {
-        return array.solarInputPower.get() - sinkPowerW.get();
+    public double netPowerWBattery() {
+        double net = (array.solarInputPower.get() - sinkPowerW.get()) / 3600;
+        if (batteryFull.get()) {
+            return Math.min(net, 0.0);
+        } else if (batteryEmpty.get()) {
+            return Math.max(net, 0.0);
+        } else {
+            return net;
+        }
     }
 
     //calculates the state of charge of the battery by integrating the net power and checking if the battery is full or not
     //already
     public double updateSOC() {
-        /**
-        RealResource incCharge = RealResource.scaleBy(1.0/batteryCapacityWH, this.integratedNetPower).scaledBy(100);
-        if (batterySOC == null) {
-            return RealResource.scaleBy(0.0, integratedNetPower);
-        }
-        if ((batterySOC.get() + incCharge.get()) > 100.0) {
-            return RealResource.scaleBy(1.0/integratedNetPower.get(), integratedNetPower).scaledBy(100);
-        } else if ((batterySOC.get() + incCharge.get()) < 0.0) {
-            return RealResource.scaleBy(0.0, integratedNetPower);
-        }
-        return RealResource.add(batterySOC, incCharge);
-        //another thing you could do is pass in the expression for incCharge into the if/else statements and see if that works
-        */
         double incCharge = (integratedNetPower.get() / batteryCapacityWH) * 100;
         if (batterySOC == null) {
             return this.initialBatterySOC + incCharge;
