@@ -22,8 +22,8 @@ public class UpdatePowerLoad {
     @EffectModel
     public void run(Mission model) {
         //model.battery.array.area.set(area);
-        model.battery.addSink(powerReq);
+        //model.battery.addLoad(powerReq);
         delay(Duration.of(duration, Duration.HOURS));
-        model.battery.removeSink(powerReq);
+        //model.battery.removeLoad(powerReq);
      }
 }

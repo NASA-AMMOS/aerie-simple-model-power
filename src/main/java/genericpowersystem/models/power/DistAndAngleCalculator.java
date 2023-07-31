@@ -18,25 +18,14 @@ public class DistAndAngleCalculator {
             arr.distance.set(value);
             dCount += 0.2;
             delay(Duration.of(2, Duration.HOURS));
-            //maybe make it a random number and pass it into a linear function
         }
     }
 
     public void updateAngle() {
-        //int aCount = 0;
         int max = 90;
         int min = -90;
         int range = max - min + 1;
         while (true) {
-            /**
-            double value = (aCount * aCount * aCount) + (2 * aCount * aCount) + (5 * aCount) + 7;
-            if (value < 0 || value > 360) {
-                arr.angle.set(90.0);
-            } else {
-                arr.angle.set(value);
-            }
-            aCount += 1;
-             */
             double value = (Math.random() * range) + min;
             arr.angle.set(value);
             delay(Duration.of(2, Duration.HOURS));

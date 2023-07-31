@@ -13,6 +13,9 @@ public final class GeneratedSchedulerModel implements SchedulerModel {
     final var result = new HashMap<String, DurationType>();
     result.put("SolarPowerGeneration", DurationType.uncontrollable());
     result.put("UpdatePowerLoad", DurationType.uncontrollable());
+    result.put("TurnOnCamera", DurationType.uncontrollable());
+    result.put("TurnOnTelecomm", DurationType.uncontrollable());
+    result.put("ChangeGNCState", DurationType.uncontrollable());
     return result;
   }
 }

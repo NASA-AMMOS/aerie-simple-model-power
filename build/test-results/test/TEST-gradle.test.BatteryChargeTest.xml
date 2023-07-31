@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="gradle.test.BatteryChargeTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-07-24T21:05:03" hostname="MT-110968" time="0.017">
+<testsuite name="gradle.test.BatteryChargeTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-07-31T20:45:04" hostname="MT-110968" time="0.076">
   <properties/>
-  <testcase name="testDefaultSerializationDoesNotThrow()" classname="gradle.test.BatteryChargeTest" time="0.017"/>
+  <testcase name="testDefaultSerializationDoesNotThrow()" classname="gradle.test.BatteryChargeTest" time="0.076"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

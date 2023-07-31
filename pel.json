@@ -1,0 +1,80 @@
+{
+    "power_loads": [
+        {
+            "name": "GNC",
+            "power_states": [
+                {
+                    "state": "Nominal",
+                    "power_usage": {
+                        "value": 200.0,
+                        "units": "W",
+                        "quantity_type": "electrical power"
+                    }
+                },
+                {
+                    "state": "Turning",
+                    "power_usage": {
+                        "value": 100.0,
+                        "units": "W",
+                        "quantity_type": "electrical power"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Telecomm",
+            "power_states": [
+                {
+                    "state": "Off",
+                    "power_usage": {
+                        "value": 0.0,
+                        "units": "W",
+                        "quantity_type": "electrical power"
+                    }
+                },
+                {
+                    "state": "On",
+                    "power_usage": {
+                        "value": 800.0,
+                        "units": "W",
+                        "quantity_type": "electrical power"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Avionics",
+            "power_states": [
+                {
+                    "state": "On",
+                    "power_usage": {
+                        "value": 500.0,
+                        "units": "W",
+                        "quantity_type": "electrical power"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Camera",
+            "power_states": [
+                {
+                    "state": "Off",
+                    "power_usage": {
+                        "value": 0.0,
+                        "units": "W",
+                        "quantity_type": "electrical power"
+                    }
+                },
+                {
+                    "state": "On",
+                    "power_usage": {
+                        "value": 600.0,
+                        "units": "W",
+                        "quantity_type": "electrical power"
+                    }
+                }
+            ]
+        }
+    ]
+}

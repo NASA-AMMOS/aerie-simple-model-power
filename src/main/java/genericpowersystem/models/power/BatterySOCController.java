@@ -15,7 +15,6 @@ public class BatterySOCController {
             var battNotYetRegisteredFull = battery.batteryFull.is(false);
             ModelActions.waitUntil(batteryIsFull.and(battNotYetRegisteredFull));
             battery.batteryFull.set(true);
-            //battery.batterySOC = RealResource.scaleBy((1 / battery.integratedNetPower.get()), battery.integratedNetPower).scaledBy(100.0);
         }
     }
 
@@ -25,7 +24,6 @@ public class BatterySOCController {
             var battNotYetRegisteredEmpty = battery.batteryEmpty.is(false);
             ModelActions.waitUntil(batteryIsEmpty.and(battNotYetRegisteredEmpty));
             battery.batteryEmpty.set(true);
-            //battery.batterySOC = battery.batterySOC.scaledBy(0.0);
         }
     }
 
@@ -36,14 +34,6 @@ public class BatterySOCController {
             var battStillRegisteredFull = battery.batteryFull.is(true);
             ModelActions.waitUntil(batteryIsNotFull.and(battStillRegisteredFull));
             battery.batteryFull.set(false);
-            /**
-            var val = RealResource.add(RealResource.scaleBy(1.0/battery.batteryCapacityWH, battery.integratedNetPower).scaledBy(100), battery.batterySOC);
-            if (val.get() <= 100.0) {
-                battery.batterySOC = RealResource.add(RealResource.scaleBy(1.0/battery.batteryCapacityWH, battery.integratedNetPower).scaledBy(100), battery.batterySOC);
-            } else {
-                battery.batterySOC = RealResource.scaleBy((1 / battery.integratedNetPower.get()), battery.integratedNetPower).scaledBy(100.0);
-            }
-             */
         }
     }
 
@@ -54,14 +44,6 @@ public class BatterySOCController {
             var battStillRegisteredEmpty = battery.batteryEmpty.is(true);
             ModelActions.waitUntil(batteryIsNotEmpty.and(battStillRegisteredEmpty));
             battery.batteryEmpty.set(false);
-            /**
-            var val = RealResource.add(RealResource.scaleBy(1.0/battery.batteryCapacityWH, battery.integratedNetPower).scaledBy(100), battery.batterySOC);
-            if (val.get() >= 0.0) {
-                battery.batterySOC = RealResource.add(RealResource.scaleBy(1.0/battery.batteryCapacityWH, battery.integratedNetPower).scaledBy(100), battery.batterySOC);
-            } else {
-                battery.batterySOC = battery.batterySOC.scaledBy(0.0);
-            }
-             */
         }
     }
 
