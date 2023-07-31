@@ -18,8 +18,8 @@ public class BatteryModel {
     public double batteryCapacityWH; //the battery's capacity in watt-hours
     public DerivedState<Double> actualNetPowerW;  //represents the net power into/out of the battery
     public DerivedState<Double> netPowerW;   //net power for the computation of batterySOC
-    //public SettableState<Double> powerLoadW;   //represents how much power is required by the spacecraft
-    public DerivedState<Double> powerLoadW;
+    //public SettableState<Double> powerLoadW;
+    public DerivedState<Double> powerLoadW; //represents how much power is required by the spacecraft, connected to the PEL
     public RealResource batterySOC;  //the state of charge of the battery
     //public DerivedState<Double> batterySOC;
     //public double initialBatteryChargeWH = 0.0;
@@ -122,6 +122,12 @@ public class BatteryModel {
         }
         return (batterySOC.get() + incCharge);
     }
+
+    /**
+     * Computes the power load of the spacecraft so the battery will be discharged accordingly, value changes whenever
+     * the states of the instruments change
+     * @return the power load of the spacecraft
+     */
 
     public double computeLoad() {
         return this.pel.avionicsState.get().getLoad() + this.pel.cameraState.get().getLoad() + this.pel.telecommState.get().getLoad() + this.pel.gncState.get().getLoad();
