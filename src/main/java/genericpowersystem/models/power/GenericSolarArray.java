@@ -7,7 +7,7 @@ import gov.nasa.jpl.aerie.merlin.framework.ModelActions;
 
 /**
  * This class represents the power generation for the spacecraft using a solar array. The solar array is associated with
- * a battery model, and it supplies power to the spacecraft and the battery.
+ * a battery model, and it supplies power to the spacecraft and the battery. It is part of the overall power system.
  */
 
 public class GenericSolarArray {
