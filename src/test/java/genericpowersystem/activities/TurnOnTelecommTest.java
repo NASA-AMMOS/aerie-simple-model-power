@@ -1,7 +1,7 @@
 package gradle.test;
 
-import genericpowersystem.activities.power.TurnOnTelecomm;
-import genericpowersystem.generated.activities.power.TurnOnTelecommMapper;
+import genericpowersystem.activities.TurnOnTelecomm;
+import genericpowersystem.generated.activities.TurnOnTelecommMapper;
 import org.junit.jupiter.api.Test;
 
 class TurnOnTelecommTest {

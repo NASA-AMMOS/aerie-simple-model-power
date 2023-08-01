@@ -1,6 +1,6 @@
 package genericpowersystem;
 
-import genericpowersystem.models.power.PELModel;
+
 import gov.nasa.jpl.aerie.merlin.framework.Registrar;
 import gov.nasa.jpl.aerie.contrib.serialization.mappers.DoubleValueMapper;
 import genericpowersystem.models.power.BatteryModel;

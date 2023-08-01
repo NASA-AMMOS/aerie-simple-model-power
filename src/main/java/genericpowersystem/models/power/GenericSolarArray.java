@@ -1,5 +1,6 @@
 package genericpowersystem.models.power;
 
+import genericpowersystem.models.DistAndAngleCalculator;
 
 import gov.nasa.jpl.aerie.merlin.framework.ModelActions;
 //import gov.nasa.jpl.aerie.merlin.framework.resources.real.RealResource;

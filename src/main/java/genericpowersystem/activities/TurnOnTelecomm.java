@@ -1,6 +1,6 @@
-package genericpowersystem.activities.power;
+package genericpowersystem.activities;
 
-import genericpowersystem.models.power.Telecomm_State;
+import genericpowersystem.models.pel.Telecomm_State;
 import gov.nasa.jpl.aerie.merlin.framework.annotations.ActivityType;
 import gov.nasa.jpl.aerie.merlin.framework.annotations.ActivityType.EffectModel;
 import gov.nasa.jpl.aerie.merlin.framework.annotations.Export.Parameter;

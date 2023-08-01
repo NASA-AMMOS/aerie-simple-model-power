@@ -1,7 +1,8 @@
-package genericpowersystem.models.power;
+package genericpowersystem.models;
 import gov.nasa.jpl.aerie.merlin.framework.ModelActions;
 import gov.nasa.jpl.aerie.merlin.protocol.types.Duration;
 import static gov.nasa.jpl.aerie.merlin.framework.ModelActions.delay;
+import genericpowersystem.models.power.GenericSolarArray;
 
 
 public class DistAndAngleCalculator {

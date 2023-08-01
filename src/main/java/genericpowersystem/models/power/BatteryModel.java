@@ -2,6 +2,7 @@ package genericpowersystem.models.power;
 
 import gov.nasa.jpl.aerie.merlin.framework.ModelActions;
 import gov.nasa.jpl.aerie.merlin.framework.resources.real.RealResource;
+import genericpowersystem.models.pel.PELModel;
 
 
 /**
@@ -133,26 +134,5 @@ public class BatteryModel {
         return this.pel.avionicsState.get().getLoad() + this.pel.cameraState.get().getLoad() + this.pel.telecommState.get().getLoad() + this.pel.gncState.get().getLoad();
     }
 
-
-    /**
-     * Adds more power load to the existing power required by the spacecraft
-     * @param rate the power rate to add
-
-    public void addLoad(double rate) {
-        var curr = this.powerLoadW.get();
-        this.powerLoadW.set(rate + curr);
-    }
-    */
-
-
-    /**
-     * Removes some power from the power required by the spacecraft
-     * @param rate the power rate to remove
-
-    public void removeLoad(double rate) {
-        var curr = this.powerLoadW.get();
-        this.powerLoadW.set(curr - rate);
-    }
-    */
 
 }

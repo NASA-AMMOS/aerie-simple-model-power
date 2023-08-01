@@ -1,7 +1,7 @@
 package gradle.test;
 
-import genericpowersystem.activities.power.TurnOnCamera;
-import genericpowersystem.generated.activities.power.TurnOnCameraMapper;
+import genericpowersystem.activities.TurnOnCamera;
+import genericpowersystem.generated.activities.TurnOnCameraMapper;
 import org.junit.jupiter.api.Test;
 
 class TurnOnCameraTest {
