@@ -5,12 +5,10 @@
 @WithActivityType(SolarPowerGeneration.class)
 @WithActivityType(TurnOnCamera.class)
 @WithActivityType(TurnOnTelecomm.class)
-@WithActivityType(GNCStateTurning.class)
-@WithActivityType(GNCStateNominal.class)
+@WithActivityType(ChangeGNCState.class)
 package examplemodel;
 
-import examplemodel.activities.GNCStateTurning;
-import examplemodel.activities.GNCStateNominal;
+import examplemodel.activities.ChangeGNCState;
 import examplemodel.activities.power.SolarPowerGeneration;
 import examplemodel.activities.TurnOnTelecomm;
 import examplemodel.activities.TurnOnCamera;
