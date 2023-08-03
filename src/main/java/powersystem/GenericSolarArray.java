@@ -20,27 +20,30 @@ public class GenericSolarArray {
     public SettableState<Double> distance;  //distance of spacecraft from the Sun in AU
     public SettableState<Double> angle;  //angle between the suns rays and the normal vector of the surface of the solar array (because of the spacecraft's orientation)
     public SettableState<Double> area;  //area of the solar array
-    public DistAndAngleCalculator calculator;  //has functions that allows distance and angle to change on their own
+    //public DistAndAngleCalculator calculator;  //has functions that allows distance and angle to change on their own
 
     /**
      * Constructor for the solar array
      * @param area the area of the solar array in m^2
      */
 
-    public GenericSolarArray(double area) {
+    public GenericSolarArray(double area, SettableState<Double> distance, SettableState<Double> angle) {
         this.solarArrayDeploymentComplete = SettableState.builder(Boolean.class).initialValue(false).build();
         this.solarArrayDeploymentStarted = SettableState.builder(Boolean.class).initialValue(false).build();
-        this.distance = SettableState.builder(Double.class).initialValue(0.0).build();
-        this.angle = SettableState.builder(Double.class).initialValue(-90.0).build();
+        //this.distance = SettableState.builder(Double.class).initialValue(0.0).build();
+        //this.angle = SettableState.builder(Double.class).initialValue(-90.0).build();
+        this.distance = distance;
+        this.angle = angle;
         this.area = SettableState.builder(Double.class).initialValue(area).build();
 
         this.solarInputPower = DerivedState.builder(Double.class)
                 .sourceStates(this.distance, this.angle, this.solarArrayDeploymentComplete, this.solarArrayDeploymentStarted)
                 .valueFunction(this::computeSolarPower)
                 .build();
-
+        /**
         this.calculator = new DistAndAngleCalculator(this);
         ModelActions.spawn(calculator::run);
+         */
     }
 
     /**

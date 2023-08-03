@@ -1,16 +1,20 @@
-package powersystem;
+package demosystem;
 import gov.nasa.jpl.aerie.merlin.framework.ModelActions;
 import gov.nasa.jpl.aerie.merlin.protocol.types.Duration;
 import static gov.nasa.jpl.aerie.merlin.framework.ModelActions.delay;
+import powersystem.SettableState;
+
 
 /**
  * This class updates the distance and angle automatically through daemon tasks.
  */
 public class DistAndAngleCalculator {
-    private GenericSolarArray arr;
+    public SettableState<Double> distance;  //distance of spacecraft from the Sun in AU
+    public SettableState<Double> angle;  //angle between the suns rays and the normal vector of the surface of the solar array (because of the spacecraft's orientation)
 
-    public DistAndAngleCalculator(GenericSolarArray arr) {
-        this.arr = arr;
+    public DistAndAngleCalculator() {
+        this.distance = SettableState.builder(Double.class).initialValue(0.0).build();
+        this.angle = SettableState.builder(Double.class).initialValue(-90.0).build();
     }
 
     /**
@@ -20,7 +24,7 @@ public class DistAndAngleCalculator {
         double dCount = 0;
         while(true) {
             double value = dCount;
-            arr.distance.set(value);
+            distance.set(value);
             dCount += 0.2;
             delay(Duration.of(2, Duration.HOURS));
         }
@@ -35,7 +39,7 @@ public class DistAndAngleCalculator {
         int range = max - min + 1;
         while (true) {
             double value = (Math.random() * range) + min;
-            arr.angle.set(value);
+            angle.set(value);
             delay(Duration.of(2, Duration.HOURS));
         }
     }
