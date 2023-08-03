@@ -20,8 +20,7 @@ public class BatteryModel {
     public double batteryCapacityAH; //the battery's capacity in amp-hours
     public double batteryCapacityWH; //the battery's capacity in watt-hours
     public DerivedState<Double> actualNetPowerW;  //represents the net power into/out of the battery
-    public DerivedState<Double> netPowerW;   //net power for the computation of batterySOC
-    //public SettableState<Double> powerLoadW;
+    public DerivedState<Double> battNetPowerW;   //net power for the computation of batterySOC
     public DerivedState<Double> powerLoadW; //represents how much power is required by the spacecraft, connected to the PEL
     public RealResource batterySOC;  //the state of charge of the battery
     //public DerivedState<Double> batterySOC;
@@ -61,12 +60,12 @@ public class BatteryModel {
                 .sourceStates(this.array.solarInputPower, this.powerLoadW)
                 .valueFunction(this::computeNetPowerW)
                 .build();
-        this.netPowerW = DerivedState.builder(Double.class)
+        this.battNetPowerW = DerivedState.builder(Double.class)
                 .sourceStates(this.array.solarInputPower, this.powerLoadW, this.batteryFull, this.batteryEmpty)
                 .valueFunction(this::netPowerWBattery)
                 .build();
         this.integratedNetPower = IntegratedState.builder()
-                .integrandState(this.netPowerW)
+                .integrandState(this.battNetPowerW)
                 .initialValue(0.0)
                 .build();
 /**
@@ -141,7 +140,7 @@ public class BatteryModel {
         registrar.discrete("battery.array.distance", array.distance, new DoubleValueMapper());
         registrar.discrete("battery.array.angle", array.angle, new DoubleValueMapper());
         registrar.discrete("battery.array.solarInputPower", array.solarInputPower, new DoubleValueMapper());
-        registrar.discrete("battery.netPowerW", netPowerW, new DoubleValueMapper());
+        registrar.discrete("battery.battNetPowerW", battNetPowerW, new DoubleValueMapper());
         registrar.discrete("battery.actualNetPowerW", actualNetPowerW, new DoubleValueMapper());
         //registrar.discrete("battery.batterySOC", battery.batterySOC, new DoubleValueMapper());
         registrar.real("battery.batterySOC", batterySOC);

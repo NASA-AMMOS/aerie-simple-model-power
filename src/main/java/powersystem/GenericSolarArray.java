@@ -1,6 +1,5 @@
 package powersystem;
 
-import demosystem.models.DistAndAngleCalculator;
 
 import gov.nasa.jpl.aerie.merlin.framework.ModelActions;
 //import gov.nasa.jpl.aerie.merlin.framework.resources.real.RealResource;
@@ -58,7 +57,6 @@ public class GenericSolarArray {
         } else {
             return 0.0;
         }
-        //return (irrLosses * (solarIntensity / (distance.get() * distance.get())) * Math.cos(Math.toRadians(angle.get())) * area.get());
     }
 
     /**
@@ -82,9 +80,11 @@ public class GenericSolarArray {
     /**
      * Method to represent the closing of the arrays (basically no longer generating solar power)
      */
+    /**
     public void closeSolarArrays() {
         this.solarArrayDeploymentComplete.set(false);
         this.solarArrayDeploymentStarted.set(false);
     }
+     */
 
 }

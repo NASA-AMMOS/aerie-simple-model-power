@@ -15,7 +15,5 @@ public class ChangeGNCState {
     @EffectModel
     public void run(Mission model) {
         model.battery.pel.gncState.set(newState);
-        //delay(Duration.of(duration, Duration.HOURS));
-        //model.battery.pel.gncState.set(GNC_State.NOMINAL);
     }
 }

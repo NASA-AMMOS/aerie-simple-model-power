@@ -2,12 +2,20 @@ package powersystem;
 import gov.nasa.jpl.aerie.merlin.framework.ModelActions;
 import gov.nasa.jpl.aerie.merlin.framework.resources.real.RealResource;
 
+/**
+ * This class is used by the BatteryModel class, and it is helpful in making sure the battery state of charge stays
+ * in the limits of 0 to 100 by working with the integrated net power.
+ */
 public class BatterySOCController {
     private BatteryModel battery;
     private double EPSILON = 0.000001;
     public BatterySOCController(BatteryModel battery) {
         this.battery = battery;
     }
+
+    /**
+     * This function makes sure that the integrated net power does not exceed the battery capacity.
+     */
     public void limitBatteryCharging() {
         while (true) {
             var batteryIsFull = battery.integratedNetPower.isBetween(this.battery.batteryCapacityWH,
@@ -18,6 +26,9 @@ public class BatterySOCController {
         }
     }
 
+    /**
+     * This function makes sure the integrated net power does not go below 0.
+     */
     public void limitBatteryDepletion() {
         while (true) {
             var batteryIsEmpty = battery.integratedNetPower.isBetween(Double.NEGATIVE_INFINITY, 0.0);
@@ -27,6 +38,9 @@ public class BatterySOCController {
         }
     }
 
+    /**
+     * This function makes sure that the battery is charging correctly.
+     */
     public void enableNormalBatteryFullOps() {
         while (true) {
             var batteryIsNotFull = battery.integratedNetPower.isBetween(Double.NEGATIVE_INFINITY,
@@ -37,6 +51,9 @@ public class BatterySOCController {
         }
     }
 
+    /**
+     * This function makes sure that the battery is discharging correctly.
+     */
     public void enableNormalBatteryEmptyOps() {
         while (true) {
             var batteryIsNotEmpty = battery.integratedNetPower.isBetween(0.0 + EPSILON,
@@ -47,6 +64,10 @@ public class BatterySOCController {
         }
     }
 
+    /**
+     * This function is what is called in the BatteryModel to make sure that the other methods in this class are
+     * constantly running and checking the integrated net power and battery state of charge.
+     */
     public void run() {
         // The four conditions we care about monitoring:
         // 1. integratedNetPower == batteryCapacityWH but batteryFull == false -> set batteryFull to true

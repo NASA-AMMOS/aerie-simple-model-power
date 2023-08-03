@@ -1,10 +1,11 @@
-package demosystem.models;
+package powersystem;
 import gov.nasa.jpl.aerie.merlin.framework.ModelActions;
 import gov.nasa.jpl.aerie.merlin.protocol.types.Duration;
 import static gov.nasa.jpl.aerie.merlin.framework.ModelActions.delay;
-import powersystem.GenericSolarArray;
 
-
+/**
+ * This class updates the distance and angle automatically through daemon tasks.
+ */
 public class DistAndAngleCalculator {
     private GenericSolarArray arr;
 
@@ -12,6 +13,9 @@ public class DistAndAngleCalculator {
         this.arr = arr;
     }
 
+    /**
+     * Function to update distance
+     */
     public void updateDistance() {
         double dCount = 0;
         while(true) {
@@ -22,6 +26,9 @@ public class DistAndAngleCalculator {
         }
     }
 
+    /**
+     * Function to update angle
+     */
     public void updateAngle() {
         int max = 90;
         int min = -90;
@@ -32,6 +39,10 @@ public class DistAndAngleCalculator {
             delay(Duration.of(2, Duration.HOURS));
         }
     }
+
+    /**
+     * Function that constantly runs (called by the GenericSolarArray class) to update distance and angle
+     */
     public void run() {
         //automatically updates the distance
         ModelActions.spawn(this::updateDistance);
