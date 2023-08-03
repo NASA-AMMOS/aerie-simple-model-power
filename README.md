@@ -37,7 +37,7 @@ This repo provides a simple Aerie power mission model. Below are the steps on ho
 To build the mission model JAR you can do:
 
 ```sh
-./gradlew build --refresh-dependencies # Outputs 'build/libs/examplemodel.jar'
+./gradlew build --refresh-dependencies # Outputs 'build/libs/demosystem.jar'
 ```
 
 You can deploy Aerie on your local machine by first opening Docker Desktop and then you can start the Aerie services using the following command:
