@@ -28,8 +28,8 @@ This repo provides a simple Aerie power mission model. Below are the steps on ho
 - Set `GITHUB_USER` and `GITHUB_TOKEN` environment variables to your credentials (first you need to create a [personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic) in your GitHub account) so you can download the Aerie Maven packages from the [GitHub Maven package registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry). For example with Zsh you can update your `.zshrc` to set the variables with:
 
   ```sh
-  export GITHUB_USER=""
-  export GITHUB_TOKEN=""
+  export GITHUB_USER="your github user"
+  export GITHUB_TOKEN="your github token"
   ```
 
 ## Building

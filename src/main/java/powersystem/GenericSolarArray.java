@@ -11,7 +11,7 @@ import gov.nasa.jpl.aerie.merlin.framework.ModelActions;
  */
 
 public class GenericSolarArray {
-    public double solarIntensity = 1367; //the radiation from the sun, in W/m^2
+    public double solarIntensity = 1360.8; //the radiation from the sun, in W/m^2
     public double solarConstant = 0.07;  //to use when solar array is not completely deployed and not producing max power with area
     public double irrLosses = 0.984 * 0.94 * 0.99; //represents the irradiance losses (losses because of the material of the array)
     public SettableState<Boolean> solarArrayDeploymentComplete; //whether the solar array is fully deployed
