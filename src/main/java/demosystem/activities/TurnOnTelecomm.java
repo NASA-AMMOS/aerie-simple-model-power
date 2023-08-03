@@ -14,8 +14,8 @@ public class TurnOnTelecomm {
 
     @EffectModel
     public void run(Mission model) {
-        model.battery.pel.telecommState.set(Telecomm_State.ON);
+        model.pel.telecommState.set(Telecomm_State.ON);
         delay(Duration.of(duration, Duration.HOURS));
-        model.battery.pel.telecommState.set(Telecomm_State.OFF);
+        model.pel.telecommState.set(Telecomm_State.OFF);
     }
 }

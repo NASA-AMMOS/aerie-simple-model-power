@@ -14,6 +14,6 @@ public class ChangeGNCState {
 
     @EffectModel
     public void run(Mission model) {
-        model.battery.pel.gncState.set(newState);
+        model.pel.gncState.set(newState);
     }
 }

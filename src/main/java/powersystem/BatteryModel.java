@@ -33,7 +33,7 @@ public class BatteryModel {
     public GenericSolarArray array;    //solar array that effects the charging of the battery
     public BatterySOCController controller; //helpful in determining what state the battery is in (full or empty) and
                                             // limits the integrated net power between 0 to battery capacity in watt-hours
-    public PELModel pel;
+    //public PELModel pel;
 
     /**
      * The constructor for the battery model
@@ -42,17 +42,19 @@ public class BatteryModel {
      * @param initialBatterySOC the initial battery state of charge
      */
 
-    public BatteryModel(double busVoltage, double batteryCapacityAH, double initialBatterySOC) {
+    public BatteryModel(double busVoltage, double batteryCapacityAH, double initialBatterySOC, DerivedState<Double> totalLoad) {
         this.busVoltage = busVoltage;
         this.batteryCapacityAH = batteryCapacityAH;
         this.batteryCapacityWH = this.batteryCapacityAH * this.busVoltage;
-        this.pel = new PELModel();
+        //this.pel = new PELModel();
         this.initialBatterySOC = initialBatterySOC;
-        //this.powerLoadW = SettableState.builder(Double.class).initialValue(0.0).build();
+        this.powerLoadW = totalLoad;
+        /**
         this.powerLoadW = DerivedState.builder(Double.class)
                 .sourceStates(this.pel.avionicsState, this.pel.telecommState, this.pel.cameraState, this.pel.gncState)
                 .valueFunction(this::computeLoad)
                 .build();
+         */
         this.array = new GenericSolarArray(5.0);
         this.batteryFull = SettableState.builder(Boolean.class).initialValue(false).build();
         this.batteryEmpty = SettableState.builder(Boolean.class).initialValue(true).build();
@@ -129,11 +131,12 @@ public class BatteryModel {
      * Computes the power load of the spacecraft so the battery will be discharged accordingly, value changes whenever
      * the states of the instruments change
      * @return the power load of the spacecraft
-     */
+
 
     public double computeLoad() {
         return this.pel.avionicsState.get().getLoad() + this.pel.cameraState.get().getLoad() + this.pel.telecommState.get().getLoad() + this.pel.gncState.get().getLoad();
     }
+    */
 
     public void registerStates(Registrar registrar) {
         registrar.discrete("battery.powerLoadW", powerLoadW, new DoubleValueMapper());

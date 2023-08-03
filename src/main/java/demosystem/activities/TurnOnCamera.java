@@ -14,8 +14,8 @@ public class TurnOnCamera {
 
     @EffectModel
     public void run(Mission model) {
-        model.battery.pel.cameraState.set(Camera_State.ON);
+        model.pel.cameraState.set(Camera_State.ON);
         delay(Duration.of(duration, Duration.HOURS));
-        model.battery.pel.cameraState.set(Camera_State.OFF);
+        model.pel.cameraState.set(Camera_State.OFF);
     }
 }
