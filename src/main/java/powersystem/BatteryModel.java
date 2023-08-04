@@ -42,7 +42,7 @@ public class BatteryModel {
      * @param initialBatterySOC the initial battery state of charge
      */
 
-    public BatteryModel(double busVoltage, double batteryCapacityAH, double initialBatterySOC, DerivedState<Double> totalLoad, SettableState<Double> dist, SettableState<Double> ang) {
+    public BatteryModel(double busVoltage, double batteryCapacityAH, double initialBatterySOC, DerivedState<Double> totalLoad, GenericSolarArray arr) {
         this.busVoltage = busVoltage;
         this.batteryCapacityAH = batteryCapacityAH;
         this.batteryCapacityWH = this.batteryCapacityAH * this.busVoltage;
@@ -55,7 +55,8 @@ public class BatteryModel {
                 .valueFunction(this::computeLoad)
                 .build();
          */
-        this.array = new GenericSolarArray(12.0, dist, ang);
+        //this.array = new GenericSolarArray(12.0, distance, angle);
+        this.array = arr;
         this.batteryFull = SettableState.builder(Boolean.class).initialValue(false).build();
         this.batteryEmpty = SettableState.builder(Boolean.class).initialValue(true).build();
         this.actualNetPowerW = DerivedState.builder(Double.class)
