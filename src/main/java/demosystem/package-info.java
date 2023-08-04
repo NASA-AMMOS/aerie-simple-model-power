@@ -9,7 +9,7 @@
 package demosystem;
 
 import demosystem.activities.ChangeGNCState;
-import demosystem.activities.power.SolarPowerGeneration;
+import powersystem.activities.power.SolarPowerGeneration;
 import demosystem.activities.TurnOnTelecomm;
 import demosystem.activities.TurnOnCamera;
 import gov.nasa.jpl.aerie.contrib.serialization.rulesets.BasicValueMappers;

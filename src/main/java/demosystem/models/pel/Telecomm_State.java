@@ -7,7 +7,7 @@ package demosystem.models.pel;
 
 public enum Telecomm_State {
 	OFF(0.0),
-	ON(150.0);
+	ON(50.0);
     private final double load;
     Telecomm_State(double load) {
         this.load = load;  //in Watts

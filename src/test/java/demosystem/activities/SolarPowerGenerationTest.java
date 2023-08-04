@@ -1,7 +1,7 @@
 package gradle.test;
 
-import demosystem.activities.power.SolarPowerGeneration;
-import demosystem.generated.activities.power.SolarPowerGenerationMapper;
+import powersystem.activities.power.SolarPowerGeneration;
+import demosystem.generatedpowersystem.activities.power.SolarPowerGenerationMapper;
 import org.junit.jupiter.api.Test;
 
 class SolarPowerGenerationTest {

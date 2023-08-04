@@ -1,4 +1,4 @@
-package demosystem.activities.power;
+package powersystem.activities.power;
 
 import static gov.nasa.jpl.aerie.merlin.framework.ModelActions.delay;
 import gov.nasa.jpl.aerie.merlin.framework.annotations.ActivityType;

@@ -6,8 +6,8 @@ package demosystem.models.pel;
  */
 
 public enum GNC_State {
-	NOMINAL(200.0),
-	TURNING(300.0);
+	NOMINAL(100.0),
+	TURNING(150.0);
     private final double load;
     GNC_State(double load) {
         this.load = load;  //in Watts

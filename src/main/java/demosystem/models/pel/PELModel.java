@@ -22,7 +22,7 @@ public class PELModel {
 		this.avionicsState = SettableState.builder(Avionics_State.class).initialValue(Avionics_State.ON).build();
 		this.cameraState = SettableState.builder(Camera_State.class).initialValue(Camera_State.OFF).build();
         this.totalLoad = DerivedState.builder(Double.class)
-                .sourceStates(this.gncState, this.telecommState, this.cameraState)
+                .sourceStates(this.gncState, this.telecommState, this.avionicsState, this.cameraState)
 				.valueFunction(this::computeLoad)
 				.build();
 	}

@@ -7,7 +7,7 @@ package demosystem.models.pel;
 
 public enum Camera_State {
 	OFF(0.0),
-	ON(200.0);
+	ON(100.0);
     private final double load;
     Camera_State(double load) {
         this.load = load;  //in Watts

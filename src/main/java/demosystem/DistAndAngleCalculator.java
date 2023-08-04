@@ -26,7 +26,7 @@ public class DistAndAngleCalculator {
             double value = dCount;
             distance.set(value);
             dCount += 0.2;
-            delay(Duration.of(2, Duration.HOURS));
+            delay(Duration.of(1, Duration.HOURS));
         }
     }
 
