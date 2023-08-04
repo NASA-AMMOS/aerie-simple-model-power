@@ -18,7 +18,7 @@ public class GenericSolarArray {
     public SettableState<Boolean> solarArrayDeploymentStarted;  //whether the solar array has started deploying and therefore produces some power
     public DerivedState<Double> solarInputPower;   //represents current/power flowing into battery
     public SettableState<Double> distance;  //distance of spacecraft from the Sun in AU
-    public SettableState<Double> angle;  //angle between the suns rays and the normal vector of the surface of the solar array (because of the spacecraft's orientation)
+    public SettableState<Double> angle;  //angle between the suns rays and the normal vector of the surface of the solar array (because of the spacecraft's orientation) in degrees
     public SettableState<Double> area;  //area of the solar array
     //public DistAndAngleCalculator calculator;  //has functions that allows distance and angle to change on their own
 

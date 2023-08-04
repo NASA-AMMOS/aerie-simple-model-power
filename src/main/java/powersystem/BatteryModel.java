@@ -25,7 +25,7 @@ public class BatteryModel {
     public RealResource batterySOC;  //the state of charge of the battery
     //public DerivedState<Double> batterySOC;
     //public double initialBatteryChargeWH = 0.0;
-    public double initialBatterySOC;  //the initial battery state of charge before any charging/discharging
+    //public double initialBatterySOC;  //the initial battery state of charge before any charging/discharging
     public SettableState<Boolean> batteryFull;  //whether the battery is at 100% or not
     public SettableState<Boolean> batteryEmpty;  //whether the battery is at 0% or not
     public IntegratedState integratedNetPower;   //the integration of the net power, represents how much the battery was
@@ -39,15 +39,15 @@ public class BatteryModel {
      * The constructor for the battery model
      * @param busVoltage the voltage of the battery
      * @param batteryCapacityAH the capacity of the battery in amp-hours
-     * @param initialBatterySOC the initial battery state of charge
+     * //@param initialBatterySOC the initial battery state of charge
      */
 
-    public BatteryModel(double busVoltage, double batteryCapacityAH, double initialBatterySOC, DerivedState<Double> totalLoad, GenericSolarArray arr) {
+    public BatteryModel(double busVoltage, double batteryCapacityAH, DerivedState<Double> totalLoad, GenericSolarArray arr) {
         this.busVoltage = busVoltage;
         this.batteryCapacityAH = batteryCapacityAH;
         this.batteryCapacityWH = this.batteryCapacityAH * this.busVoltage;
         //this.pel = new PELModel();
-        this.initialBatterySOC = initialBatterySOC;
+        //this.initialBatterySOC = initialBatterySOC;
         this.powerLoadW = totalLoad;
         /**
         this.powerLoadW = DerivedState.builder(Double.class)
@@ -114,7 +114,7 @@ public class BatteryModel {
      * Calculates the state of charge of the battery by integrating the net power and limiting the battery SOC based on
      * if it is full or empty
      * @return the battery SOC, a value between 0 and 100
-     */
+
     public double updateSOC() {
         double incCharge = (integratedNetPower.get() / batteryCapacityWH) * 100;
         if (batterySOC == null) {
@@ -127,6 +127,7 @@ public class BatteryModel {
         }
         return (batterySOC.get() + incCharge);
     }
+    */
 
     /**
      * Computes the power load of the spacecraft so the battery will be discharged accordingly, value changes whenever
