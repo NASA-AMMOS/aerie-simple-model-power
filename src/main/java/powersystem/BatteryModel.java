@@ -4,6 +4,7 @@ import gov.nasa.jpl.aerie.contrib.serialization.mappers.DoubleValueMapper;
 import gov.nasa.jpl.aerie.merlin.framework.ModelActions;
 import gov.nasa.jpl.aerie.merlin.framework.Registrar;
 import gov.nasa.jpl.aerie.merlin.framework.resources.real.RealResource;
+import gov.nasa.jpl.aerie.merlin.framework.Resource;
 
 
 
@@ -28,6 +29,7 @@ public class BatteryModel {
     //public double initialBatterySOC;  //the initial battery state of charge before any charging/discharging
     public SettableState<Boolean> batteryFull;  //whether the battery is at 100% or not
     public SettableState<Boolean> batteryEmpty;  //whether the battery is at 0% or not
+    //public SettableState<Double> solarPower;
     public IntegratedState integratedNetPower;   //the integration of the net power, represents how much the battery was
                                                 // charged/discharged and helps calculate the SOC
     public GenericSolarArray array;    //solar array that effects the charging of the battery
@@ -42,20 +44,20 @@ public class BatteryModel {
      * //@param initialBatterySOC the initial battery state of charge
      */
 
-    public BatteryModel(double busVoltage, double batteryCapacityAH, DerivedState<Double> totalLoad, GenericSolarArray arr) {
+    public BatteryModel(double busVoltage, double batteryCapacityAH, Resource<Double> totalLoad, GenericSolarArray arr) {
         this.busVoltage = busVoltage;
         this.batteryCapacityAH = batteryCapacityAH;
         this.batteryCapacityWH = this.batteryCapacityAH * this.busVoltage;
         //this.pel = new PELModel();
         //this.initialBatterySOC = initialBatterySOC;
-        this.powerLoadW = totalLoad;
+        this.powerLoadW = (DerivedState<Double>) totalLoad;
         /**
         this.powerLoadW = DerivedState.builder(Double.class)
                 .sourceStates(this.pel.avionicsState, this.pel.telecommState, this.pel.cameraState, this.pel.gncState)
                 .valueFunction(this::computeLoad)
                 .build();
          */
-        //this.array = new GenericSolarArray(12.0, distance, angle);
+        //this.solarPower = (SettableState<Double>) inputPower;
         this.array = arr;
         this.batteryFull = SettableState.builder(Boolean.class).initialValue(false).build();
         this.batteryEmpty = SettableState.builder(Boolean.class).initialValue(true).build();

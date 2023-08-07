@@ -3,7 +3,7 @@ package powersystem;
 
 import gov.nasa.jpl.aerie.merlin.framework.ModelActions;
 //import gov.nasa.jpl.aerie.merlin.framework.resources.real.RealResource;
-//import gov.nasa.jpl.aerie.merlin.framework.Resource;
+import gov.nasa.jpl.aerie.merlin.framework.Resource;
 
 /**
  * This class represents the power generation for the spacecraft using a solar array. The solar array is associated with
@@ -27,13 +27,13 @@ public class GenericSolarArray {
      * @param area the area of the solar array in m^2
      */
 
-    public GenericSolarArray(double area, SettableState<Double> distance, SettableState<Double> angle) {
+    public GenericSolarArray(double area, Resource<Double> distance, Resource<Double> angle) {
         this.solarArrayDeploymentComplete = SettableState.builder(Boolean.class).initialValue(false).build();
         this.solarArrayDeploymentStarted = SettableState.builder(Boolean.class).initialValue(false).build();
         //this.distance = SettableState.builder(Double.class).initialValue(0.0).build();
         //this.angle = SettableState.builder(Double.class).initialValue(-90.0).build();
-        this.distance = distance;
-        this.angle = angle;
+        this.distance = (SettableState<Double>) distance;
+        this.angle = (SettableState<Double>) angle;
         this.area = SettableState.builder(Double.class).initialValue(area).build();
 
         this.solarInputPower = DerivedState.builder(Double.class)

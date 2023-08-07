@@ -6,7 +6,7 @@ package demosystem.models.pel;
  */
 
 public enum Avionics_State {
-	ON(200.0);
+	ON(100.0);
     private final double load;
     Avionics_State(double load) {
         this.load = load;  //in Watts
