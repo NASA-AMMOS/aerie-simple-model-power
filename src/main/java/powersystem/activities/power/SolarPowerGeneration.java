@@ -17,9 +17,9 @@ public class SolarPowerGeneration {
 
     @EffectModel
     public void run(Mission model) {
-        model.battery.array.startSolarArrayDeployment();
+        model.array.startSolarArrayDeployment();
         delay(Duration.of(30, Duration.MINUTES));
-        model.battery.array.endSolarArrayDeployment();
+        model.array.endSolarArrayDeployment();
         //delay(Duration.of(duration, Duration.HOURS));
         //model.battery.array.closeSolarArrays();
     }

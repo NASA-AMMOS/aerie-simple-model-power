@@ -6,18 +6,28 @@ package demosystem.models.pel;
  */
 
 public enum Avionics_State {
-	ON(100.0);
-    private final double load;
-    Avionics_State(double load) {
-        this.load = load;  //in Watts
+	ON(100.0, 115.0);
+    private final double cbeload;
+    private final double mevload;
+    Avionics_State(double cbeload, double mevload) {
+        this.cbeload = cbeload;  //in Watts
+        this.mevload = mevload; //in Watts
     }
 
     /**
-     * Function that returns the load of state of the instrument.
+     * Function that returns the cbe load of state of the instrument.
      * @return the power needed for that state
      */
-    public double getLoad() {
-        return load;  
+    public double getCBELoad() {
+        return cbeload;  
+    }
+
+    /**
+     * Function that returns the mev load of state of the instrument.
+     * @return the power needed for that state
+     */
+    public double getMEVLoad() {
+        return mevload;  
     }
 }
     

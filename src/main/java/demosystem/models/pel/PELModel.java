@@ -2,6 +2,7 @@ package demosystem.models.pel;
 
 import gov.nasa.jpl.aerie.merlin.framework.Registrar;
 import gov.nasa.jpl.aerie.contrib.serialization.mappers.EnumValueMapper;
+import gov.nasa.jpl.aerie.contrib.serialization.mappers.DoubleValueMapper;
 import powersystem.SettableState;
 import powersystem.DerivedState;
 
@@ -11,7 +12,8 @@ import powersystem.DerivedState;
  */
 public class PELModel {
 
-    public DerivedState<Double> totalLoad;
+    public DerivedState<Double> cbeTotalLoad;
+    public DerivedState<Double> mevTotalLoad;
 	public SettableState<GNC_State> gncState;
 	public SettableState<Telecomm_State> telecommState;
 	public SettableState<Avionics_State> avionicsState;
@@ -21,23 +23,37 @@ public class PELModel {
 		this.telecommState = SettableState.builder(Telecomm_State.class).initialValue(Telecomm_State.OFF).build();
 		this.avionicsState = SettableState.builder(Avionics_State.class).initialValue(Avionics_State.ON).build();
 		this.cameraState = SettableState.builder(Camera_State.class).initialValue(Camera_State.OFF).build();
-        this.totalLoad = DerivedState.builder(Double.class)
+        this.cbeTotalLoad = DerivedState.builder(Double.class)
                 .sourceStates(this.gncState, this.telecommState, this.avionicsState, this.cameraState)
-				.valueFunction(this::computeLoad)
+				.valueFunction(this::computeCBELoad)
+				.build();        this.mevTotalLoad = DerivedState.builder(Double.class)
+                .sourceStates(this.gncState, this.telecommState, this.avionicsState, this.cameraState)
+				.valueFunction(this::computeMEVLoad)
 				.build();
 	}
     /**
-     * Computes the power load of the spacecraft so the battery will be discharged accordingly, value changes whenever
+     * Computes the CBE power load of the spacecraft so the battery will be discharged accordingly, value changes whenever
      * the states of the instruments change
      * @return the power load of the spacecraft
      */
-    public double computeLoad() {
-        return this.gncState.get().getLoad() + this.telecommState.get().getLoad() + this.avionicsState.get().getLoad() + this.cameraState.get().getLoad();
+    public double computeCBELoad() {
+        return this.gncState.get().getCBELoad() + this.telecommState.get().getCBELoad() + this.avionicsState.get().getCBELoad() + this.cameraState.get().getCBELoad();
+	}
+
+    /**
+     * Computes the MEV power load of the spacecraft so the battery will be discharged accordingly, value changes whenever
+     * the states of the instruments change
+     * @return the power load of the spacecraft
+     */
+    public double computeMEVLoad() {
+        return this.gncState.get().getMEVLoad() + this.telecommState.get().getMEVLoad() + this.avionicsState.get().getMEVLoad() + this.cameraState.get().getMEVLoad();
 	}
     public void registerStates(Registrar registrar) {
 		registrar.discrete("gncState",gncState, new EnumValueMapper<>(GNC_State.class));
 		registrar.discrete("telecommState",telecommState, new EnumValueMapper<>(Telecomm_State.class));
 		registrar.discrete("avionicsState",avionicsState, new EnumValueMapper<>(Avionics_State.class));
 		registrar.discrete("cameraState",cameraState, new EnumValueMapper<>(Camera_State.class));
+		registrar.discrete("spacecraft.cbeLoad", cbeTotalLoad, new DoubleValueMapper());
+		registrar.discrete("spacecraft.mevLoad", mevTotalLoad, new DoubleValueMapper());
 	}
 }

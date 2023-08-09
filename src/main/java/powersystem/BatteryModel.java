@@ -17,6 +17,7 @@ import gov.nasa.jpl.aerie.merlin.framework.Resource;
  */
 
 public class BatteryModel {
+    public String name;
     public double busVoltage;  //the voltage of the battery in volts
     public double batteryCapacityAH; //the battery's capacity in amp-hours
     public double batteryCapacityWH; //the battery's capacity in watt-hours
@@ -25,17 +26,13 @@ public class BatteryModel {
     public DerivedState<Double> powerLoadW; //represents how much power is required by the spacecraft, connected to the PEL
     public RealResource batterySOC;  //the state of charge of the battery
     //public DerivedState<Double> batterySOC;
-    //public double initialBatteryChargeWH = 0.0;
-    //public double initialBatterySOC;  //the initial battery state of charge before any charging/discharging
     public SettableState<Boolean> batteryFull;  //whether the battery is at 100% or not
     public SettableState<Boolean> batteryEmpty;  //whether the battery is at 0% or not
-    //public SettableState<Double> solarPower;
+    public DerivedState<Double> solarPower;    //the source power, how much solar power the spacecraft is generating
     public IntegratedState integratedNetPower;   //the integration of the net power, represents how much the battery was
                                                 // charged/discharged and helps calculate the SOC
-    public GenericSolarArray array;    //solar array that effects the charging of the battery
     public BatterySOCController controller; //helpful in determining what state the battery is in (full or empty) and
                                             // limits the integrated net power between 0 to battery capacity in watt-hours
-    //public PELModel pel;
 
     /**
      * The constructor for the battery model
@@ -44,29 +41,21 @@ public class BatteryModel {
      * //@param initialBatterySOC the initial battery state of charge
      */
 
-    public BatteryModel(double busVoltage, double batteryCapacityAH, Resource<Double> totalLoad, GenericSolarArray arr) {
+    public BatteryModel(double busVoltage, double batteryCapacityAH, Resource<Double> totalLoad, Resource<Double> inputPower, String name) {
         this.busVoltage = busVoltage;
+        this.name = name;
         this.batteryCapacityAH = batteryCapacityAH;
         this.batteryCapacityWH = this.batteryCapacityAH * this.busVoltage;
-        //this.pel = new PELModel();
-        //this.initialBatterySOC = initialBatterySOC;
         this.powerLoadW = (DerivedState<Double>) totalLoad;
-        /**
-        this.powerLoadW = DerivedState.builder(Double.class)
-                .sourceStates(this.pel.avionicsState, this.pel.telecommState, this.pel.cameraState, this.pel.gncState)
-                .valueFunction(this::computeLoad)
-                .build();
-         */
-        //this.solarPower = (SettableState<Double>) inputPower;
-        this.array = arr;
+        this.solarPower = (DerivedState<Double>) inputPower;
         this.batteryFull = SettableState.builder(Boolean.class).initialValue(false).build();
         this.batteryEmpty = SettableState.builder(Boolean.class).initialValue(true).build();
         this.actualNetPowerW = DerivedState.builder(Double.class)
-                .sourceStates(this.array.solarInputPower, this.powerLoadW)
+                .sourceStates(this.solarPower, this.powerLoadW)
                 .valueFunction(this::computeNetPowerW)
                 .build();
         this.battNetPowerW = DerivedState.builder(Double.class)
-                .sourceStates(this.array.solarInputPower, this.powerLoadW, this.batteryFull, this.batteryEmpty)
+                .sourceStates(this.solarPower, this.powerLoadW, this.batteryFull, this.batteryEmpty)
                 .valueFunction(this::netPowerWBattery)
                 .build();
         this.integratedNetPower = IntegratedState.builder()
@@ -91,7 +80,7 @@ public class BatteryModel {
      * @return the net power of the system
      */
     public double computeNetPowerW() {
-        return array.solarInputPower.get() - powerLoadW.get();
+        return solarPower.get() - powerLoadW.get();
     }
 
 
@@ -101,7 +90,7 @@ public class BatteryModel {
      * @return the net power to be used for the integrated power and the battery SOC
      */
     public double netPowerWBattery() {
-        double net = (array.solarInputPower.get() - powerLoadW.get()) / 3600;
+        double net = (solarPower.get() - powerLoadW.get()) / 3600;
         if (batteryFull.get()) {
             return Math.min(net, 0.0);
         } else if (batteryEmpty.get()) {
@@ -132,27 +121,14 @@ public class BatteryModel {
     */
 
     /**
-     * Computes the power load of the spacecraft so the battery will be discharged accordingly, value changes whenever
-     * the states of the instruments change
-     * @return the power load of the spacecraft
-
-
-    public double computeLoad() {
-        return this.pel.avionicsState.get().getLoad() + this.pel.cameraState.get().getLoad() + this.pel.telecommState.get().getLoad() + this.pel.gncState.get().getLoad();
-    }
-    */
-
+     * Method for Aerie to register the resources in this model
+     * @param registrar how Aerie knows what the resources are
+     */
     public void registerStates(Registrar registrar) {
-        registrar.discrete("battery.powerLoadW", powerLoadW, new DoubleValueMapper());
-        registrar.discrete("battery.array.distance", array.distance, new DoubleValueMapper());
-        registrar.discrete("battery.array.angle", array.angle, new DoubleValueMapper());
-        registrar.discrete("battery.array.solarInputPower", array.solarInputPower, new DoubleValueMapper());
-        registrar.discrete("battery.battNetPowerW", battNetPowerW, new DoubleValueMapper());
-        registrar.discrete("battery.actualNetPowerW", actualNetPowerW, new DoubleValueMapper());
-        //registrar.discrete("battery.batterySOC", battery.batterySOC, new DoubleValueMapper());
-        registrar.real("battery.batterySOC", batterySOC);
-        registrar.real("battery.integratedNetPower", integratedNetPower);
+        registrar.discrete(name + "battery.battNetPowerW", battNetPowerW, new DoubleValueMapper());
+        registrar.discrete(name + "battery.actualNetPowerW", actualNetPowerW, new DoubleValueMapper());
+        registrar.real(name + "battery.batterySOC", batterySOC);
+        registrar.real(name + "battery.integratedNetPower", integratedNetPower);
     }
-
 
 }

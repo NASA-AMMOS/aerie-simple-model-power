@@ -13,10 +13,12 @@ for item in powerList:
     filepath = os.path.join(path, fName + ".java")
     newF = open(filepath, "w")
     stateList = []
-    loadList = []
+    cbeLoadList = []
+    mevLoadList = []
     for ent in item["power_states"]:
         stateList.append(ent["state"].upper())
-        loadList.append(ent["power_usage"]["value"])
+        cbeLoadList.append(ent["CBE_power_usage"]["value"])
+        mevLoadList.append(ent["MEV_power_usage"]["value"])
     body = f"""package demosystem.models.pel;
 
 /**
@@ -29,22 +31,32 @@ public enum {fName} {{
     for num in range(len(stateList)):
         if num != (len(stateList) - 1):
             state = stateList[num].upper()
-            body = body + "\t" + state + "(" + str(loadList[num]) + ")" + ",\n"
+            body = body + "\t" + state + "(" + str(cbeLoadList[num]) + ", " + str(mevLoadList[num]) + ")" + ",\n"
         else:
             state = stateList[num].upper()
-            body = body + "\t" + state + "(" + str(loadList[num]) + ");"+ "\n"
+            body = body + "\t" + state + "(" + str(cbeLoadList[num]) + ", " + str(mevLoadList[num]) + ");"+ "\n"
     newF.write(body)
-    constructor = f"""    private final double load;
-    {fName}(double load) {{
-        this.load = load;  //in Watts
+    constructor = f"""    private final double cbeload;
+    private final double mevload;
+    {fName}(double cbeload, double mevload) {{
+        this.cbeload = cbeload;  //in Watts
+        this.mevload = mevload; //in Watts
     }}
 
     /**
-     * Function that returns the load of state of the instrument.
+     * Function that returns the cbe load of state of the instrument.
      * @return the power needed for that state
      */
-    public double getLoad() {{
-        return load;  
+    public double getCBELoad() {{
+        return cbeload;  
+    }}
+
+    /**
+     * Function that returns the mev load of state of the instrument.
+     * @return the power needed for that state
+     */
+    public double getMEVLoad() {{
+        return mevload;  
     }}
 }}
     """
@@ -59,6 +71,7 @@ initial = f"""package demosystem.models.pel;
 
 import gov.nasa.jpl.aerie.merlin.framework.Registrar;
 import gov.nasa.jpl.aerie.contrib.serialization.mappers.EnumValueMapper;
+import gov.nasa.jpl.aerie.contrib.serialization.mappers.DoubleValueMapper;
 import powersystem.SettableState;
 import powersystem.DerivedState;
 
@@ -68,19 +81,30 @@ import powersystem.DerivedState;
  */
 public class PELModel {{
 
-    public DerivedState<Double> totalLoad;
+    public DerivedState<Double> cbeTotalLoad;
+    public DerivedState<Double> mevTotalLoad;
 """
 
 construct = f"""    public PELModel() {{
 """
-load = f"""        this.totalLoad = DerivedState.builder(Double.class)
+cbeload = f"""        this.cbeTotalLoad = DerivedState.builder(Double.class)
                 .sourceStates("""
-compute = f"""    /**
-     * Computes the power load of the spacecraft so the battery will be discharged accordingly, value changes whenever
+mevload = f"""        this.mevTotalLoad = DerivedState.builder(Double.class)
+                .sourceStates("""
+cbecompute = f"""    /**
+     * Computes the CBE power load of the spacecraft so the battery will be discharged accordingly, value changes whenever
      * the states of the instruments change
      * @return the power load of the spacecraft
      */
-    public double computeLoad() {{
+    public double computeCBELoad() {{
+        return """
+mevcompute = f"""
+    /**
+     * Computes the MEV power load of the spacecraft so the battery will be discharged accordingly, value changes whenever
+     * the states of the instruments change
+     * @return the power load of the spacecraft
+     */
+    public double computeMEVLoad() {{
         return """
 
 register = f"""    public void registerStates(Registrar registrar) {{
@@ -92,20 +116,30 @@ for x in range(len(powerList)):
     stateName = powerList[x]["power_states"][0]["state"].upper()
     construct = construct + "\t\tthis." + name.lower() + "State = SettableState.builder(" + name + "_State.class).initialValue(" + name + "_State." + stateName + ").build();\n"
     if x == (len(powerList) - 1):
-        load = load + "this." + name.lower() + "State)\n\t\t\t\t.valueFunction(this::computeLoad)\n\t\t\t\t.build();"
-        compute = compute + "this." + name.lower() + "State.get().getLoad();\n\t}\n"
+        cbeload = cbeload + "this." + name.lower() + "State)\n\t\t\t\t.valueFunction(this::computeCBELoad)\n\t\t\t\t.build();"
+        cbecompute = cbecompute + "this." + name.lower() + "State.get().getCBELoad();\n\t}\n"
+
+        mevload = mevload + "this." + name.lower() + "State)\n\t\t\t\t.valueFunction(this::computeMEVLoad)\n\t\t\t\t.build();"
+        mevcompute = mevcompute + "this." + name.lower() + "State.get().getMEVLoad();\n\t}\n"
+        
     else:
-        load = load + "this." + name.lower() + "State, "
-        compute = compute + "this." + name.lower() + "State.get().getLoad() + "
+        cbeload = cbeload + "this." + name.lower() + "State, "
+        cbecompute = cbecompute + "this." + name.lower() + "State.get().getCBELoad() + "
+
+        mevload = mevload + "this." + name.lower() + "State, "
+        mevcompute = mevcompute + "this." + name.lower() + "State.get().getMEVLoad() + "
+
+        
 
     register = register + "\t\tregistrar.discrete(\"" + name.lower() + "State\"," + name.lower() + "State, new EnumValueMapper<>(" + name + "_State.class));\n"
 
     if x == (len(powerList) - 1):
-        construct = construct + load + "\n\t}\n"
-        register = register + "\t}\n}"
+        construct = construct + cbeload + mevload + "\n\t}\n"
+        register = register + "\t\tregistrar.discrete(\"spacecraft.cbeLoad\", cbeTotalLoad, new DoubleValueMapper());\n" + "\t\tregistrar.discrete(\"spacecraft.mevLoad\", mevTotalLoad, new DoubleValueMapper());\n\t}\n}"
 pelFile.write(initial)
 pelFile.write(construct)
-pelFile.write(compute)
+pelFile.write(cbecompute)
+pelFile.write(mevcompute)
 pelFile.write(register)
 pelFile.close()
 

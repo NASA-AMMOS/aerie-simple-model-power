@@ -6,19 +6,29 @@ package demosystem.models.pel;
  */
 
 public enum Camera_State {
-	OFF(0.0),
-	ON(150.0);
-    private final double load;
-    Camera_State(double load) {
-        this.load = load;  //in Watts
+	OFF(0.0, 0.0),
+	ON(150.0, 165.0);
+    private final double cbeload;
+    private final double mevload;
+    Camera_State(double cbeload, double mevload) {
+        this.cbeload = cbeload;  //in Watts
+        this.mevload = mevload; //in Watts
     }
 
     /**
-     * Function that returns the load of state of the instrument.
+     * Function that returns the cbe load of state of the instrument.
      * @return the power needed for that state
      */
-    public double getLoad() {
-        return load;  
+    public double getCBELoad() {
+        return cbeload;  
+    }
+
+    /**
+     * Function that returns the mev load of state of the instrument.
+     * @return the power needed for that state
+     */
+    public double getMEVLoad() {
+        return mevload;  
     }
 }
     

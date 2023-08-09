@@ -1,9 +1,9 @@
 package powersystem;
 
 
-import gov.nasa.jpl.aerie.merlin.framework.ModelActions;
-//import gov.nasa.jpl.aerie.merlin.framework.resources.real.RealResource;
 import gov.nasa.jpl.aerie.merlin.framework.Resource;
+import gov.nasa.jpl.aerie.merlin.framework.Registrar;
+import gov.nasa.jpl.aerie.contrib.serialization.mappers.DoubleValueMapper;
 
 /**
  * This class represents the power generation for the spacecraft using a solar array. The solar array is associated with
@@ -26,24 +26,17 @@ public class GenericSolarArray {
      * Constructor for the solar array
      * @param area the area of the solar array in m^2
      */
-
-    public GenericSolarArray(double area, Resource<Double> distance, Resource<Double> angle) {
+    public GenericSolarArray(Resource<Double> area, Resource<Double> distance, Resource<Double> angle) {
         this.solarArrayDeploymentComplete = SettableState.builder(Boolean.class).initialValue(false).build();
         this.solarArrayDeploymentStarted = SettableState.builder(Boolean.class).initialValue(false).build();
-        //this.distance = SettableState.builder(Double.class).initialValue(0.0).build();
-        //this.angle = SettableState.builder(Double.class).initialValue(-90.0).build();
         this.distance = (SettableState<Double>) distance;
         this.angle = (SettableState<Double>) angle;
-        this.area = SettableState.builder(Double.class).initialValue(area).build();
+        this.area = (SettableState<Double>) area;
 
         this.solarInputPower = DerivedState.builder(Double.class)
                 .sourceStates(this.distance, this.angle, this.solarArrayDeploymentComplete, this.solarArrayDeploymentStarted)
                 .valueFunction(this::computeSolarPower)
                 .build();
-        /**
-        this.calculator = new DistAndAngleCalculator(this);
-        ModelActions.spawn(calculator::run);
-         */
     }
 
     /**
@@ -81,13 +74,12 @@ public class GenericSolarArray {
     }
 
     /**
-     * Method to represent the closing of the arrays (basically no longer generating solar power)
+     * Method for Aerie to register the resources in this model
+     * @param registrar how Aerie knows what the resources are
      */
-    /**
-    public void closeSolarArrays() {
-        this.solarArrayDeploymentComplete.set(false);
-        this.solarArrayDeploymentStarted.set(false);
+    public void registerStates(Registrar registrar) {
+        registrar.discrete("array.solarPower", solarInputPower, new DoubleValueMapper());
+        registrar.discrete("spacecraft.distance", distance, new DoubleValueMapper());
+        registrar.discrete("spacecraft.angle", angle, new DoubleValueMapper());
     }
-     */
-
 }

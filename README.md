@@ -2,6 +2,10 @@
 
 This repo provides a simple Aerie power mission model. Below are the steps on how to upload and use this model in Aerie.
 
+# Organization
+
+The core power model is in the power system package. This is what the mission modeler would integrate into their own spacecraft if they wanted to use this power model. The demosystem package in this repo is an example to show how a mission modeler can integrate this power model into their model, especially in the package.info file and the top-level mission class.
+
 ## Prerequisites
 
 - Install [OpenJDK Temurin LTS](https://adoptium.net/temurin/releases/?version=19). If you're on macOS, you can install [brew](https://brew.sh/) instead and then use the following command to install JDK 19:
