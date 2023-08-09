@@ -4,7 +4,7 @@ This repo provides a simple Aerie power mission model. Below are the steps on ho
 
 # Organization
 
-The core power model is in the power system package. This is what the mission modeler would integrate into their own spacecraft if they wanted to use this power model. The demosystem package in this repo is an example to show how a mission modeler can integrate this power model into their model, especially in the package.info file and the top-level mission class.
+The core power model is in the power system package in this repo. This is what the mission modeler would integrate into their own spacecraft model if they needed a power model. The demosystem package in this repo is an example to show how a mission modeler can integrate this power model into their model, specifically by changing their package.info file and their top-level mission class.
 
 ## Prerequisites
 
