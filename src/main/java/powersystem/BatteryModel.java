@@ -33,6 +33,7 @@ public class BatteryModel {
                                                 // charged/discharged and helps calculate the SOC
     public BatterySOCController controller; //helpful in determining what state the battery is in (full or empty) and
                                             // limits the integrated net power between 0 to battery capacity in watt-hours
+    public boolean startOfSim;      //determines whether the simulation just started and helps the battery SOC equal 100%
 
     /**
      * The constructor for the battery model
@@ -44,12 +45,13 @@ public class BatteryModel {
     public BatteryModel(double busVoltage, double batteryCapacityAH, Resource<Double> totalLoad, Resource<Double> inputPower, String name) {
         this.busVoltage = busVoltage;
         this.name = name;
+        this.startOfSim = true;
         this.batteryCapacityAH = batteryCapacityAH;
         this.batteryCapacityWH = this.batteryCapacityAH * this.busVoltage;
         this.powerLoadW = (DerivedState<Double>) totalLoad;
         this.solarPower = (DerivedState<Double>) inputPower;
-        this.batteryFull = SettableState.builder(Boolean.class).initialValue(false).build();
-        this.batteryEmpty = SettableState.builder(Boolean.class).initialValue(true).build();
+        this.batteryFull = SettableState.builder(Boolean.class).initialValue(true).build();
+        this.batteryEmpty = SettableState.builder(Boolean.class).initialValue(false).build();
         this.actualNetPowerW = DerivedState.builder(Double.class)
                 .sourceStates(this.solarPower, this.powerLoadW)
                 .valueFunction(this::computeNetPowerW)
@@ -91,6 +93,10 @@ public class BatteryModel {
      */
     public double netPowerWBattery() {
         double net = (solarPower.get() - powerLoadW.get()) / 3600;
+        if (startOfSim == true) {
+            startOfSim = false;
+            return busVoltage * batteryCapacityAH;
+        }
         if (batteryFull.get()) {
             return Math.min(net, 0.0);
         } else if (batteryEmpty.get()) {
