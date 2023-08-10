@@ -4,7 +4,7 @@ This repo provides a simple Aerie power mission model. Below are the steps on ho
 
 ## Organization
 
-The core power model is in the power system package in this repo. This is what the mission modeler would integrate into their own spacecraft model if they needed a power model. The demosystem package in this repo is an example to show how a mission modeler can integrate this power model into their model, specifically by changing their package.info file and their top-level mission class.
+The core power model is in the power system package in this repo. This is what the mission modeler would integrate into their own spacecraft model if they needed a power model. The demosystem package in this repo is an example to show how a mission modeler can integrate this power model into their model, specifically by changing their package.info file and their top-level mission class. 
 
 ## Prerequisites
 
@@ -44,7 +44,7 @@ To build the mission model JAR you can do:
 ./gradlew build --refresh-dependencies # Outputs 'build/libs/demosystem.jar'
 ```
 
-You can deploy Aerie on your local machine by first opening Docker Desktop and then you can start the Aerie services using the following command:
+You can deploy Aerie on your local machine by first opening Docker Desktop and then you can start the Aerie services using the following command in Terminal:
 
 ```sh
 docker compose up

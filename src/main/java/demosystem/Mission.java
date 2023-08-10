@@ -4,10 +4,10 @@ package demosystem;
 import demosystem.models.pel.PELModel;
 import gov.nasa.jpl.aerie.merlin.framework.ModelActions;
 import gov.nasa.jpl.aerie.merlin.framework.Registrar;
-import powersystem.BatteryModel;
-import powersystem.GenericSolarArray;
 import powersystem.SettableState;
 
+import powersystem.BatteryModel;
+import powersystem.GenericSolarArray;
 
 public class Mission {
 
