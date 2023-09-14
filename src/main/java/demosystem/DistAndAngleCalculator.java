@@ -6,11 +6,11 @@ import powersystem.SettableState;
 
 
 /**
- * This class updates the distance and angle automatically through daemon tasks.
+ * This class updates the distance and arrayToSunAngle automatically through daemon tasks.
  */
 public class DistAndAngleCalculator {
     public SettableState<Double> distance;  //distance of spacecraft from the Sun in AU
-    public SettableState<Double> angle;  //angle between the suns rays and the normal vector of the surface of the solar array (because of the spacecraft's orientation)
+    public SettableState<Double> angle;  //arrayToSunAngle between the suns rays and the normal vector of the surface of the solar array (because of the spacecraft's orientation)
 
     public DistAndAngleCalculator() {
         this.distance = SettableState.builder(Double.class).initialValue(0.0).build();
@@ -31,7 +31,7 @@ public class DistAndAngleCalculator {
     }
 
     /**
-     * Function to update angle
+     * Function to update arrayToSunAngle
      */
     public void updateAngle() {
         int max = 90;
@@ -45,12 +45,12 @@ public class DistAndAngleCalculator {
     }
 
     /**
-     * Function that constantly runs (called by the GenericSolarArray class) to update distance and angle
+     * Function that constantly runs (called by the GenericSolarArray class) to update distance and arrayToSunAngle
      */
     public void run() {
         //automatically updates the distance
         ModelActions.spawn(this::updateDistance);
-        //automatically updates the angle
+        //automatically updates the arrayToSunAngle
         ModelActions.spawn(this::updateAngle);
     }
 }
