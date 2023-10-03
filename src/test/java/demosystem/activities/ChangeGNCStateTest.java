@@ -1,4 +1,4 @@
-package gradle.test;
+package demosystem.activities;
 
 import demosystem.activities.ChangeGNCState;
 import demosystem.generated.activities.ChangeGNCStateMapper;

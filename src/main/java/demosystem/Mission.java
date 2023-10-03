@@ -20,14 +20,13 @@ public class Mission {
 
 
     public Mission(final Registrar registrar, final Configuration config) {
-        SettableState<Double> area = SettableState.builder(Double.class).initialValue(5.0).build();
         this.calculator = new DistAndAngleCalculator();
         ModelActions.spawn(calculator::run);
 
         this.pel = new PELModel();
-        this.array = new GenericSolarArray(area, calculator.distance, calculator.angle);
-        this.cbebattery = new BatteryModel(32.0, 220.0, pel.cbeTotalLoad, array.solarInputPower, "cbe");
-        this.mevbattery = new BatteryModel(32.0, 220.0, pel.mevTotalLoad, array.solarInputPower, "mev");
+        this.array = new GenericSolarArray(config.powerConfig(), calculator.distance, calculator.angle);
+        this.cbebattery = new BatteryModel(32.0, 220.0, pel.cbeTotalLoad, array.powerProduction, "cbe");
+        this.mevbattery = new BatteryModel(32.0, 220.0, pel.mevTotalLoad, array.powerProduction, "mev");
 
         pel.registerStates(registrar);
         array.registerStates(registrar);

@@ -2,14 +2,14 @@
 @WithMappers(BasicValueMappers.class)
 @WithConfiguration(Configuration.class)
 
-@WithActivityType(SolarPowerGeneration.class)
+@WithActivityType(SolarArrayDeployment.class)
 @WithActivityType(TurnOnCamera.class)
 @WithActivityType(TurnOnTelecomm.class)
 @WithActivityType(ChangeGNCState.class)
 package demosystem;
 
 import demosystem.activities.ChangeGNCState;
-import powersystem.activities.power.SolarPowerGeneration;
+import powersystem.activities.power.SolarArrayDeployment;
 import demosystem.activities.TurnOnTelecomm;
 import demosystem.activities.TurnOnCamera;
 import gov.nasa.jpl.aerie.contrib.serialization.rulesets.BasicValueMappers;

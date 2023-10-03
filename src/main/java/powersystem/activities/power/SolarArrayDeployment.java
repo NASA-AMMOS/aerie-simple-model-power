@@ -6,21 +6,18 @@ import gov.nasa.jpl.aerie.merlin.framework.annotations.ActivityType.EffectModel;
 import gov.nasa.jpl.aerie.merlin.framework.annotations.Export.Parameter;
 import gov.nasa.jpl.aerie.merlin.protocol.types.Duration;
 import demosystem.Mission;
+import powersystem.ArrayDeploymentStates;
 
-@ActivityType("SolarPowerGeneration")
-public class SolarPowerGeneration {
+@ActivityType("SolarArrayDeployment")
+public class SolarArrayDeployment {
 
-   // @Parameter public long duration = 50;
-
-
-
+   @Parameter
+   public double deployDuration = 30; // minutes
 
     @EffectModel
     public void run(Mission model) {
-        model.array.startSolarArrayDeployment();
-        delay(Duration.of(30, Duration.MINUTES));
-        model.array.endSolarArrayDeployment();
-        //delay(Duration.of(duration, Duration.HOURS));
-        //model.battery.array.closeSolarArrays();
+        model.array.setSolarArrayDeploymentState(ArrayDeploymentStates.DEPLOYING);
+        delay(Duration.roundNearest(deployDuration, Duration.MINUTES));
+        model.array.setSolarArrayDeploymentState(ArrayDeploymentStates.DEPLOYED);
     }
 }
