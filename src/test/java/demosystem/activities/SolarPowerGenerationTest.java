@@ -1,18 +1,18 @@
-package gradle.test;
+package demosystem.activities;
 
-import powersystem.activities.power.SolarPowerGeneration;
-import demosystem.generatedpowersystem.activities.power.SolarPowerGenerationMapper;
+import powersystem.activities.power.SolarArrayDeployment;
+import demosystem.generatedpowersystem.activities.power.SolarArrayDeploymentMapper;
 import org.junit.jupiter.api.Test;
 
 class SolarPowerGenerationTest {
-  private final SolarPowerGenerationMapper mapper;
+  private final SolarArrayDeploymentMapper mapper;
 
   public SolarPowerGenerationTest() {
-    this.mapper = new SolarPowerGenerationMapper();
+    this.mapper = new SolarArrayDeploymentMapper();
   }
 
   @Test
   public void testDefaultSerializationDoesNotThrow() {
-    this.mapper.getInputType().getArguments(new SolarPowerGeneration());
+    this.mapper.getInputType().getArguments(new SolarArrayDeployment());
   }
 }

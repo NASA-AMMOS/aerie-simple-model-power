@@ -11,32 +11,45 @@ import gov.nasa.jpl.aerie.contrib.serialization.mappers.DoubleValueMapper;
  */
 
 public class GenericSolarArray {
-    public final double solarIntensityAtEarth = 1360.8; //solar irradiance from the sun at 1 AU (W/m^2)
+    public final double SOLAR_INTENSITY_AT_EARTH = 1360.8; //solar irradiance from the sun at 1 AU (W/m^2)
     public double solarConstant = 0.07;  //to use when solar array is not completely deployed and not producing max power with arrayCellArea
-    public double irrLosses = 0.984 * 0.94 * 0.99; //represents the irradiance losses (losses because of the material of the array)
-    public SettableState<Boolean> solarArrayDeploymentComplete; //whether the solar array is fully deployed
-    public SettableState<Boolean> solarArrayDeploymentStarted;  //whether the solar array has started deploying and therefore produces some power
+
+    public SettableState<ArrayDeploymentStates> solarArrayDeploymentState; //State of solar array deployment
     public DerivedState<Double> powerProduction;   //total power produced by the solar arrays (W)
     public SettableState<Double> solarDistance;  //spacecraft distance from the Sun (AU)
     public SettableState<Double> arrayToSunAngle;  //angle between the Sun and the array surface normal vector due to spacecraft orientation (deg)
     public SettableState<Double> arrayCellArea;  //area of the solar arrays containing solar cells (m^2) that can produce power
+
+    public PowerModelSimConfig simConfig;
+
+    public double staticArrayLosses; // Array losses that we do not expect to change with sim time
+
     //public DistAndAngleCalculator calculator;  //has functions that allows distance and arrayToSunAngle to change on their own
 
     /**
      * Constructor for the solar array
-     * @param arrayCellArea the arrayCellArea of the solar array in m^2
+     * @param powerSimConfig power sim configuration parameters
+     * @param solarDistance resource tracking solar distance over time
+     * @param powerSimConfig resource tracking array to Sun angle over time
      */
-    public GenericSolarArray(Resource<Double> arrayCellArea, Resource<Double> solarDistance, Resource<Double> arrayToSunAngle) {
-        this.solarArrayDeploymentComplete = SettableState.builder(Boolean.class).initialValue(false).build();
-        this.solarArrayDeploymentStarted = SettableState.builder(Boolean.class).initialValue(false).build();
+    public GenericSolarArray(PowerModelSimConfig powerSimConfig, Resource<Double> solarDistance, Resource<Double> arrayToSunAngle) {
+        this.simConfig = powerSimConfig;
+        this.solarArrayDeploymentState = SettableState.builder(ArrayDeploymentStates.class)
+                .initialValue( powerSimConfig.deploymentState() ).build();
         this.solarDistance = (SettableState<Double>) solarDistance;
         this.arrayToSunAngle = (SettableState<Double>) arrayToSunAngle;
-        this.arrayCellArea = (SettableState<Double>) arrayCellArea;
+        this.arrayCellArea = SettableState.builder(Double.class)
+                .initialValue( simConfig.arrayMechArea() * simConfig.packingFactor() )
+                .build();
 
         this.powerProduction = DerivedState.builder(Double.class)
-                .sourceStates(this.solarDistance, this.arrayToSunAngle, this.solarArrayDeploymentComplete, this.solarArrayDeploymentStarted)
+                .sourceStates(this.solarDistance, this.arrayToSunAngle, this.solarArrayDeploymentState)
                 .valueFunction(this::computeSolarPower)
                 .build();
+
+        this.staticArrayLosses = simConfig.cellEfficiency() *
+                                 simConfig.conversionEfficiency() *
+                                 simConfig.otherLosses();
     }
 
     /**
@@ -46,31 +59,21 @@ public class GenericSolarArray {
      * @return the solar power
      */
     public double computeSolarPower() {
-        if (solarArrayDeploymentStarted.get() && !solarArrayDeploymentComplete.get()) {
-            return (irrLosses * solarConstant * (solarIntensityAtEarth / (solarDistance.get() * solarDistance.get())) * Math.cos(Math.toRadians(arrayToSunAngle.get())) * arrayCellArea.get());
-        } else if (solarArrayDeploymentComplete.get()) {
-           return (irrLosses * (solarIntensityAtEarth / (solarDistance.get() * solarDistance.get())) * Math.cos(Math.toRadians(arrayToSunAngle.get())) * arrayCellArea.get());
+        if (solarArrayDeploymentState.get() == ArrayDeploymentStates.DEPLOYED) {
+            return (SOLAR_INTENSITY_AT_EARTH / (solarDistance.get() * solarDistance.get()) *
+                    arrayCellArea.get() *
+                    staticArrayLosses *
+                    Math.cos(Math.toRadians(arrayToSunAngle.get())) );
         } else {
             return 0.0;
         }
     }
 
     /**
-     * Method to represent when the solar arrays have fully deployed and are producing as much power as they can,
-     * recomputes the solar power based on the changed attributes of the array
+     * Method to set the deployment state of the solar array
      */
-    public void endSolarArrayDeployment() {
-        this.solarArrayDeploymentComplete.set(true);
-        this.solarArrayDeploymentStarted.set(false);
-    }
-
-    /**
-     * Method to represent that the solar arrays have started to deploy, it is not producing the max amount of power it
-     * can, recomputes the solar power based on the changed attributes of the array
-     */
-    public void startSolarArrayDeployment() {
-        this.solarArrayDeploymentComplete.set(false);
-        this.solarArrayDeploymentStarted.set(true);
+    public void setSolarArrayDeploymentState(ArrayDeploymentStates newState) {
+        this.solarArrayDeploymentState.set(newState);
     }
 
     /**
