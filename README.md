@@ -1,10 +1,20 @@
-# Generic/Multi-Mission Power Model
+# Aerie Simple Power Model
 
-This repo provides a simple Aerie power mission model. Below are the steps on how to upload and use this model in Aerie.
+This repository provides a simple, configurable spacecraft power model for use within the [Aerie framework](https://github.com/NASA-AMMOS/aerie). The power model includes basic components to represent a power source (e.g. solar arrays), spacecraft power loads (represented as a power equipment list), and energy storage (e.g. battery). A detailed description of the equations and variables that drive the model behavior is available [here](docs/ModelBehaviorDescription.md).
+
+## Quick Start
+
+Interested in giving the power model a quick spin? We've pre-built a very simple example spacecraft model, demosystem, that uses the power model. This model has a few activities in it that turn on/off various spacecraft loads. To try out this model, simply load [demosystem.jar](demosystem.jar) into Aerie. If you have never used Aerie before and need some help getting it deployed and uploading a model, start [here](https://nasa-ammos.github.io/aerie-docs/introduction/#fast-track).
+
+Once you have loaded [demosystem.jar](demosystem.jar) into Aerie, make a plan with a time range of your choosing (a plan length of a day should be reasonable). Once you have created a plan, add a couple of activities to it (e.g. TurnOnCamera) and hit the simulate button. Once the simulation completes you should see a green check appear next to the Simulation icon, and viola, you have successfully run the power model!
+
+To actually see the results of the simulation you ran, you can load a pre-built view that will place a number of different resources on to the timeline for (power load, battery state of charge, etc.)
+
+There are number of configuration variables available in the "Simulation" pane that you can adjust to produce different behavior with the power model. Feel free to play around with these configurations and re-simulate to see how the results change.
 
 ## Organization
 
-The core power model is in the [power system package](https://github.jpl.nasa.gov/MPS/aerie-power-system/tree/main/src/main/java/powersystem) in this repo. This is what the mission modeler would integrate into their own spacecraft model if they needed a power model. The [demosystem package](https://github.jpl.nasa.gov/MPS/aerie-power-system/tree/main/src/main/java/demosystem) in this repo is an example to show how a mission modeler can integrate this power model into their model, specifically by changing their package.info file and their top-level mission class. 
+The core power model is in the [power system package](src/main/java/powersystem/) in this repo. This is what the mission modeler would integrate into their own spacecraft model if they needed a power model. The [demosystem package](src/main/java/demosystem/) in this repo is an example to show how a mission modeler can integrate this power model into their model, specifically by changing their package.info file and their top-level mission class.
 
 ## Prerequisites
 
@@ -50,7 +60,7 @@ You can deploy Aerie on your local machine by first opening Docker Desktop and t
 docker compose up
 ```
 
-You can then upload the JAR to Aerie using either the [UI](http://localhost/) or API. 
+You can then upload the JAR to Aerie using either the [UI](http://localhost/) or API.
 
 ## Testing
 
