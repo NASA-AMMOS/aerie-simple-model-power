@@ -26,7 +26,8 @@ public class PELModel {
         this.cbeTotalLoad = DerivedState.builder(Double.class)
                 .sourceStates(this.gncState, this.telecommState, this.avionicsState, this.cameraState)
 				.valueFunction(this::computeCBELoad)
-				.build();        this.mevTotalLoad = DerivedState.builder(Double.class)
+				.build();
+		this.mevTotalLoad = DerivedState.builder(Double.class)
                 .sourceStates(this.gncState, this.telecommState, this.avionicsState, this.cameraState)
 				.valueFunction(this::computeMEVLoad)
 				.build();

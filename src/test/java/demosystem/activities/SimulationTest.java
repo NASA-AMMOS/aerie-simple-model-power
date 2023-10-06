@@ -32,9 +32,9 @@ public class SimulationTest {
 
 
         final var results = simulate(Configuration.defaultConfiguration(), simulationStartTime, simulationDuration, schedule);
-        for (final var segment : results.discreteProfiles.get("/cameraState").getRight()) {
-            System.out.println(segment.extent() + " " + segment.dynamics());
-        }
+//        for (final var segment : results.discreteProfiles.get("/cameraState").getRight()) {
+//            System.out.println(segment.extent() + " " + segment.dynamics());
+//        }
     }
 
     public SimulationResults simulate(

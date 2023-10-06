@@ -13,7 +13,7 @@ public class DistAndAngleCalculator {
     public SettableState<Double> angle;  //arrayToSunAngle between the suns rays and the normal vector of the surface of the solar array (because of the spacecraft's orientation)
 
     public DistAndAngleCalculator() {
-        this.distance = SettableState.builder(Double.class).initialValue(0.0).build();
+        this.distance = SettableState.builder(Double.class).initialValue(1.0).build();
         this.angle = SettableState.builder(Double.class).initialValue(-90.0).build();
     }
 
@@ -21,7 +21,7 @@ public class DistAndAngleCalculator {
      * Function to update distance
      */
     public void updateDistance() {
-        double dCount = 0;
+        double dCount = 1.0;
         while(true) {
             double value = dCount;
             distance.set(value);

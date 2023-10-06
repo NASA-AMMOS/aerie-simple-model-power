@@ -24,9 +24,9 @@ public class Mission {
         ModelActions.spawn(calculator::run);
 
         this.pel = new PELModel();
-        this.array = new GenericSolarArray(config.powerConfig(), calculator.distance, calculator.angle);
-        this.cbebattery = new BatteryModel(32.0, 220.0, pel.cbeTotalLoad, array.powerProduction, "cbe");
-        this.mevbattery = new BatteryModel(32.0, 220.0, pel.mevTotalLoad, array.powerProduction, "mev");
+        this.array = new GenericSolarArray(config.powerConfig().solarArrayConfig(), calculator.distance, calculator.angle);
+        this.cbebattery = new BatteryModel("cbe", config.powerConfig().batteryConfig(), pel.cbeTotalLoad, array.powerProduction);
+        this.mevbattery = new BatteryModel("mev", config.powerConfig().batteryConfig(), pel.mevTotalLoad, array.powerProduction);
 
         pel.registerStates(registrar);
         array.registerStates(registrar);
