@@ -12,30 +12,24 @@ import gov.nasa.jpl.aerie.contrib.serialization.mappers.DoubleValueMapper;
 
 public class GenericSolarArray {
     public final double SOLAR_INTENSITY_AT_EARTH = 1360.8; //solar irradiance from the sun at 1 AU (W/m^2)
-    public double solarConstant = 0.07;  //to use when solar array is not completely deployed and not producing max power with arrayCellArea
-
     public SettableState<ArrayDeploymentStates> solarArrayDeploymentState; //State of solar array deployment
     public DerivedState<Double> powerProduction;   //total power produced by the solar arrays (W)
     public SettableState<Double> solarDistance;  //spacecraft distance from the Sun (AU)
     public SettableState<Double> arrayToSunAngle;  //angle between the Sun and the array surface normal vector due to spacecraft orientation (deg)
     public SettableState<Double> arrayCellArea;  //area of the solar arrays containing solar cells (m^2) that can produce power
-
-    public PowerModelSimConfig simConfig;
-
+    public SolarArraySimConfig simConfig;
     public double staticArrayLosses; // Array losses that we do not expect to change with sim time
-
-    //public DistAndAngleCalculator calculator;  //has functions that allows distance and arrayToSunAngle to change on their own
 
     /**
      * Constructor for the solar array
-     * @param powerSimConfig power sim configuration parameters
+     * @param arraySimConfig solar array sim configuration parameters
      * @param solarDistance resource tracking solar distance over time
-     * @param powerSimConfig resource tracking array to Sun angle over time
+     * @param arrayToSunAngle resource tracking array to Sun angle over time
      */
-    public GenericSolarArray(PowerModelSimConfig powerSimConfig, Resource<Double> solarDistance, Resource<Double> arrayToSunAngle) {
-        this.simConfig = powerSimConfig;
+    public GenericSolarArray(SolarArraySimConfig arraySimConfig, Resource<Double> solarDistance, Resource<Double> arrayToSunAngle) {
+        this.simConfig = arraySimConfig;
         this.solarArrayDeploymentState = SettableState.builder(ArrayDeploymentStates.class)
-                .initialValue( powerSimConfig.deploymentState() ).build();
+                .initialValue( simConfig.deploymentState() ).build();
         this.solarDistance = (SettableState<Double>) solarDistance;
         this.arrayToSunAngle = (SettableState<Double>) arrayToSunAngle;
         this.arrayCellArea = SettableState.builder(Double.class)
