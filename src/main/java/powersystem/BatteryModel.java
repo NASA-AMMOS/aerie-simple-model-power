@@ -27,7 +27,11 @@ public class BatteryModel {
     public double busVoltage;
     public double batteryCapacityAH; //the battery's capacity in amp-hours
     public double batteryCapacityWH; //the battery's capacity in watt-hours
+
+    // public DerivedState<Double> deltaCharge;  //Change in charge of the battery since last time point
     public DerivedState<Double> batteryPower;  //Net power into/out of the battery (W)
+
+    // public SettableState<Double> batteryCurrent;  //Current flowing into/out of the battery (W)
     public DerivedState<Double> netPower;   // Net power between the power source and demand (W)
     public DerivedState<Double> powerDemand; // Power required by the spacecraft, connected to the PEL (W)
     public RealResource batterySOC;  //the state of charge of the battery
@@ -91,6 +95,17 @@ public class BatteryModel {
     public double computeNetPowerW() {
         return powerProduction.get() - powerDemand.get();
     }
+
+
+
+    /**
+     * Function called when there is either a change to spacecraft power production or demand
+     */
+//    public double onPowerChange() {
+//        batteryCurrent.get();
+//        return powerProduction.get() - powerDemand.get();
+//    }
+
 
 
     /**
