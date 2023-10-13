@@ -21,11 +21,11 @@ public class DistAndAngleCalculator {
      * Function to update distance
      */
     public void updateDistance() {
-        double dCount = 1.0;
+        double dCount = 1.6;
         while(true) {
             double value = dCount;
             distance.set(value);
-            dCount += 0.2;
+            dCount += 0.01;
             delay(Duration.of(1, Duration.HOURS));
         }
     }
@@ -36,10 +36,13 @@ public class DistAndAngleCalculator {
     public void updateAngle() {
         int max = 90;
         int min = -90;
-        int range = max - min + 1;
+        double currAngle = 45;
         while (true) {
-            double value = (Math.random() * range) + min;
-            angle.set(value);
+            currAngle = currAngle + 10;
+            if (currAngle > max) {
+                currAngle = min + (currAngle-max);
+            }
+            angle.set(currAngle);
             delay(Duration.of(2, Duration.HOURS));
         }
     }
