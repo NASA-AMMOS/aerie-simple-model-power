@@ -4,7 +4,7 @@
       "leftSplit": false,
       "leftHidden": false,
       "rightSplit": false,
-      "columnSizes": "1fr 3px 2.67574fr 3px 1.32426fr",
+      "columnSizes": "1fr 3px 3.205fr 3px 0.795055fr",
       "middleSplit": true,
       "rightHidden": false,
       "leftRowSizes": "1fr",
@@ -67,8 +67,8 @@
                 },
                 "tickCount": 4,
                 "scaleDomain": [
-                  0,
-                  10
+                  1.6,
+                  1.8400000000000003
                 ]
               }
             ],
@@ -104,14 +104,14 @@
                 "label": {
                   "text": "Sun Angle (deg)"
                 },
-                "tickCount": 4,
+                "tickCount": 6,
                 "scaleDomain": [
-                  -80.12776671084094,
-                  72.89723413125802
+                  -90,
+                  90
                 ]
               }
             ],
-            "height": 98,
+            "height": 100,
             "layers": [
               {
                 "id": 5,
@@ -188,6 +188,45 @@
             "horizontalGuides": []
           },
           {
+            "id": 8,
+            "name": "BatteryCurrent",
+            "yAxes": [
+              {
+                "id": 7,
+                "color": "#000000",
+                "label": {
+                  "text": "Current (A)"
+                },
+                "tickCount": 4,
+                "scaleDomain": [
+                  -15.282495105901543,
+                  10.85938617142269
+                ]
+              }
+            ],
+            "height": 73,
+            "layers": [
+              {
+                "id": 9,
+                "filter": {
+                  "resource": {
+                    "names": [
+                      "cbebattery.batteryCurrent"
+                    ]
+                  }
+                },
+                "yAxisId": 7,
+                "chartType": "line",
+                "lineColor": "#283593",
+                "lineWidth": 1,
+                "pointRadius": 2
+              }
+            ],
+            "expanded": true,
+            "autoAdjustHeight": false,
+            "horizontalGuides": []
+          },
+          {
             "id": 3,
             "name": "Battery SOC",
             "yAxes": [
@@ -199,8 +238,8 @@
                 },
                 "tickCount": 4,
                 "scaleDomain": [
-                  -8999380.13509924,
-                  0
+                  0,
+                  100
                 ]
               }
             ],

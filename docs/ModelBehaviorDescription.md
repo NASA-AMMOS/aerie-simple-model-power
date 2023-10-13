@@ -28,3 +28,40 @@ $L_{pointing} = cos(\theta)$
 - While solar array operating temperature also plays a role in array power output, this model currently does take this effect into account.
 
 ## Battery
+
+The battery model provided describes the behavior of a simple rechargeable ("secondary") battery that provides energy to the spacecraft when insufficient power is available from the power source (e.g. solar arrays).
+
+### Assumptions
+
+- The model currently assumes a fixed bus voltage, $V_{bus}$, which is provided as input to the model via simulation configuration
+- Battery fade (degradation) is currently not modeled, and therefore a fixed capacity is assumed
+
+### Behavior Description
+
+The battery charge from time $t_{0}$ to $t_{f}$ can be described with the following equation:
+
+$Q_{batt} = Q_{i} + \displaystyle \int_{t_{0}}^{t_{f}}I_{batt} $
+
+where \
+$Q_{batt}$ is the battery charge $(Ah)$ \
+$Q_{i}$ is the initial battery charge at $t_{0}$ $(Ah)$ \
+$I_{batt}$ is the battery current
+
+The initial battery charge, $Q_{i}$, can be determined based on the initial battery state of charge (SOC) provided to the model via sim configuration:
+
+$Q_{i} = SOC_{batt}C_{batt}$
+
+where \
+$SOC_{batt}$ is the battery state of charge as a fraction between 0 and 1 \
+$C_{batt}$ is the battery capacity
+
+The battery current, $I_{batt}$, is determined based on the difference between power production and power demand (net power):
+
+$I*{batt} = \displaystyle \frac{P_s - P_d}{V_{bus}} $
+
+where \
+$P_s$ is the source power delivered to the spacecraft $(W)$ \
+$P_d$ is the power demanded by the spacecraft components $(W)$ \
+$V_{bus}$ is the spacecraft bus voltage $(V)$
+
+When the battery is already full and the net power is positive, no more charge can enter into the battery and the battery current becomes 0. Similarly, when the battery is empty and the net power is negative, no more charge can exit the battery and the battery current becomes 0.

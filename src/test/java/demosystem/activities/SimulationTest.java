@@ -15,7 +15,7 @@ public class SimulationTest {
     @Test
     void testSimulation() {
         final var simulationStartTime = Instant.now();
-        final var simulationDuration = Duration.of(10, Duration.HOURS);
+        final var simulationDuration = Duration.of(24, Duration.HOURS);
 
         final Map<ActivityDirectiveId, ActivityDirective> schedule = new HashMap<>();
 

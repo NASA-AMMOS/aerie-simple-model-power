@@ -1,6 +1,5 @@
 package powersystem;
 import gov.nasa.jpl.aerie.merlin.framework.ModelActions;
-import gov.nasa.jpl.aerie.merlin.framework.resources.real.RealResource;
 
 /**
  * This class is used by the BatteryModel class, and it is helpful in making sure the battery state of charge stays
@@ -18,7 +17,7 @@ public class BatterySOCController {
      */
     public void limitBatteryCharging() {
         while (true) {
-            var batteryIsFull = battery.integratedNetPower.isBetween(this.battery.batteryCapacityWH,
+            var batteryIsFull = battery.batteryCharge.isBetween(this.battery.batteryCapacityAH,
                     Double.POSITIVE_INFINITY);
             var battNotYetRegisteredFull = battery.batteryFull.is(false);
             ModelActions.waitUntil(batteryIsFull.and(battNotYetRegisteredFull));
@@ -31,7 +30,7 @@ public class BatterySOCController {
      */
     public void limitBatteryDepletion() {
         while (true) {
-            var batteryIsEmpty = battery.integratedNetPower.isBetween(Double.NEGATIVE_INFINITY, 0.0);
+            var batteryIsEmpty = battery.batteryCharge.isBetween(Double.NEGATIVE_INFINITY, 0.0);
             var battNotYetRegisteredEmpty = battery.batteryEmpty.is(false);
             ModelActions.waitUntil(batteryIsEmpty.and(battNotYetRegisteredEmpty));
             battery.batteryEmpty.set(true);
@@ -43,8 +42,8 @@ public class BatterySOCController {
      */
     public void enableNormalBatteryFullOps() {
         while (true) {
-            var batteryIsNotFull = battery.integratedNetPower.isBetween(Double.NEGATIVE_INFINITY,
-                    this.battery.batteryCapacityWH-EPSILON);
+            var batteryIsNotFull = battery.batteryCharge.isBetween(Double.NEGATIVE_INFINITY,
+                    this.battery.batteryCapacityAH-EPSILON);
             var battStillRegisteredFull = battery.batteryFull.is(true);
             ModelActions.waitUntil(batteryIsNotFull.and(battStillRegisteredFull));
             battery.batteryFull.set(false);
@@ -56,7 +55,7 @@ public class BatterySOCController {
      */
     public void enableNormalBatteryEmptyOps() {
         while (true) {
-            var batteryIsNotEmpty = battery.integratedNetPower.isBetween(0.0 + EPSILON,
+            var batteryIsNotEmpty = battery.batteryCharge.isBetween(0.0 + EPSILON,
                     Double.POSITIVE_INFINITY);
             var battStillRegisteredEmpty = battery.batteryEmpty.is(true);
             ModelActions.waitUntil(batteryIsNotEmpty.and(battStillRegisteredEmpty));
