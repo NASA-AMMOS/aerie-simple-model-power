@@ -6,9 +6,12 @@
 @WithActivityType(TurnOnCamera.class)
 @WithActivityType(TurnOnTelecomm.class)
 @WithActivityType(ChangeGNCState.class)
+@WithActivityType(Drive.class)
+
 package demosystem;
 
 import demosystem.activities.ChangeGNCState;
+import demosystem.activities.Drive;
 import powersystem.activities.power.SolarArrayDeployment;
 import demosystem.activities.TurnOnTelecomm;
 import demosystem.activities.TurnOnCamera;

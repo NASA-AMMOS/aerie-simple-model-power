@@ -18,17 +18,19 @@ public class PELModel {
 	public SettableState<Telecomm_State> telecommState;
 	public SettableState<Avionics_State> avionicsState;
 	public SettableState<Camera_State> cameraState;
+	public SettableState<Double> locomotivePower; // Dynamic power
     public PELModel() {
 		this.gncState = SettableState.builder(GNC_State.class).initialValue(GNC_State.NOMINAL).build();
 		this.telecommState = SettableState.builder(Telecomm_State.class).initialValue(Telecomm_State.OFF).build();
 		this.avionicsState = SettableState.builder(Avionics_State.class).initialValue(Avionics_State.ON).build();
 		this.cameraState = SettableState.builder(Camera_State.class).initialValue(Camera_State.OFF).build();
+		this.locomotivePower = SettableState.builder(Double.class).initialValue(0.0).build();
         this.cbeTotalLoad = DerivedState.builder(Double.class)
-                .sourceStates(this.gncState, this.telecommState, this.avionicsState, this.cameraState)
+                .sourceStates(this.gncState, this.telecommState, this.avionicsState, this.cameraState, this.locomotivePower)
 				.valueFunction(this::computeCBELoad)
 				.build();
 		this.mevTotalLoad = DerivedState.builder(Double.class)
-                .sourceStates(this.gncState, this.telecommState, this.avionicsState, this.cameraState)
+                .sourceStates(this.gncState, this.telecommState, this.avionicsState, this.cameraState, this.locomotivePower)
 				.valueFunction(this::computeMEVLoad)
 				.build();
 	}
@@ -38,7 +40,11 @@ public class PELModel {
      * @return the power load of the spacecraft
      */
     public double computeCBELoad() {
-        return this.gncState.get().getCBELoad() + this.telecommState.get().getCBELoad() + this.avionicsState.get().getCBELoad() + this.cameraState.get().getCBELoad();
+        return  this.gncState.get().getCBELoad() +
+				this.telecommState.get().getCBELoad() +
+				this.avionicsState.get().getCBELoad() +
+				this.cameraState.get().getCBELoad() +
+				this.locomotivePower.get();
 	}
 
     /**
@@ -47,7 +53,11 @@ public class PELModel {
      * @return the power load of the spacecraft
      */
     public double computeMEVLoad() {
-        return this.gncState.get().getMEVLoad() + this.telecommState.get().getMEVLoad() + this.avionicsState.get().getMEVLoad() + this.cameraState.get().getMEVLoad();
+        return  this.gncState.get().getMEVLoad() +
+				this.telecommState.get().getMEVLoad() +
+				this.avionicsState.get().getMEVLoad() +
+				this.cameraState.get().getMEVLoad() +
+				this.locomotivePower.get();
 	}
     public void registerStates(Registrar registrar) {
 		registrar.discrete("gncState",gncState, new EnumValueMapper<>(GNC_State.class));
