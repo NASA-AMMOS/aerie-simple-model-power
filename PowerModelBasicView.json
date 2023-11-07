@@ -41,7 +41,9 @@
                       "ChangeGNCState",
                       "SolarArrayDeployment",
                       "TurnOnCamera",
-                      "TurnOnTelecomm"
+                      "TurnOnTelecomm",
+                      "Drive",
+                      "TurnOnTelecom"
                     ]
                   }
                 },
@@ -365,7 +367,7 @@
                 "filter": {
                   "resource": {
                     "names": [
-                      "telecommState"
+                      "telecomState"
                     ]
                   }
                 },

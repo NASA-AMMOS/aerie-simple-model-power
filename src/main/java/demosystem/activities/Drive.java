@@ -24,10 +24,10 @@ public class Drive {
     @ActivityType.EffectModel
     public void run(Mission model) {
         double durPerStep = duration/numSteps;
-        model.pel.locomotivePower.set(initialPower);
+        model.pel.locomotionPower.set(initialPower);
         for (int i = 0; i < numSteps; i++) {
             delay(Duration.roundNearest(durPerStep, Duration.HOURS));
-            model.pel.locomotivePower.set(model.pel.locomotivePower.get() + powerIncrement);
+            model.pel.locomotionPower.set(model.pel.locomotionPower.get() + powerIncrement);
         }
     }
 
