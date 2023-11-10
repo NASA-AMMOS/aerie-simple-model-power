@@ -1,152 +1,171 @@
 #for creating the java classes from the pel json file
 import json
 import os
+import sys
+import warnings
 
-#creates the enum classes for each of the power usages in the json file
-file = open("pel.json", "r")
-data = json.load(file)
-path = "src/main/java/demosystem/models/pel"
-powerList = data["power_loads"]
-for item in powerList:
-    oName = item["name"]
-    fName = item["name"] + "_State"
-    filepath = os.path.join(path, fName + ".java")
-    newF = open(filepath, "w")
-    stateList = []
-    cbeLoadList = []
-    mevLoadList = []
-    for ent in item["power_states"]:
-        stateList.append(ent["state"].upper())
-        cbeLoadList.append(ent["CBE_power_usage"]["value"])
-        mevLoadList.append(ent["MEV_power_usage"]["value"])
-    body = f"""package demosystem.models.pel;
+def main():
 
+    #creates the enum classes for each of the power usages in the json file
+    file = open("pel.json", "r")
+    data = json.load(file)
+    path = "src/main/java/demosystem/models/pel"
+    powerList = data["power_loads"]
+    for item in powerList:
+        oName = item["name"]
+        if item["load_type"] == "states":
+            fName = item["name"] + "_State"
+            filepath = os.path.join(path, fName + ".java")
+            newF = open(filepath, "w")
+            stateList = []
+            cbeLoadList = []
+            mevLoadList = []
+            for ent in item["power_states"]:
+                stateList.append(ent["state"].upper())
+                cbeLoadList.append(ent["CBE_power_usage"]["value"])
+                mevLoadList.append(ent["MEV_power_usage"]["value"])
+
+            body = f"""package demosystem.models.pel;
 /**
- * This class was created by the pel_java_generator.py script and represents the state(s) of the {oName} as an enum and associates
- * a power load amount to each state.
- */
-
-public enum {fName} {{
-"""
-    for num in range(len(stateList)):
-        if num != (len(stateList) - 1):
-            state = stateList[num].upper()
-            body = body + "\t" + state + "(" + str(cbeLoadList[num]) + ", " + str(mevLoadList[num]) + ")" + ",\n"
-        else:
-            state = stateList[num].upper()
-            body = body + "\t" + state + "(" + str(cbeLoadList[num]) + ", " + str(mevLoadList[num]) + ");"+ "\n"
-    newF.write(body)
-    constructor = f"""    private final double cbeload;
+* This class was created by the pel_java_generator.py script and represents the state(s) of the {oName} as an enum and associates
+* a power load amount to each state.
+*/
+public enum {fName} {{\n"""
+            for num in range(len(stateList)):
+                if num != (len(stateList) - 1):
+                    state = stateList[num].upper()
+                    body = body + "\t" + state + "(" + str(cbeLoadList[num]) + ", " + str(mevLoadList[num]) + ")" + ",\n"
+                else:
+                    state = stateList[num].upper()
+                    body = body + "\t" + state + "(" + str(cbeLoadList[num]) + ", " + str(mevLoadList[num]) + ");"+ "\n"
+            newF.write(body)
+            constructor = f"""    private final double cbeload;
     private final double mevload;
     {fName}(double cbeload, double mevload) {{
         this.cbeload = cbeload;  //in Watts
         this.mevload = mevload; //in Watts
     }}
-
+    
     /**
-     * Function that returns the cbe load of state of the instrument.
-     * @return the power needed for that state
-     */
+    * Function that returns the cbe load of state of the instrument.
+    * @return the power needed for that state
+    */
     public double getCBELoad() {{
         return cbeload;  
     }}
-
+    
     /**
-     * Function that returns the mev load of state of the instrument.
-     * @return the power needed for that state
-     */
+    * Function that returns the mev load of state of the instrument.
+    * @return the power needed for that state
+    */
     public double getMEVLoad() {{
         return mevload;  
     }}
 }}
-    """
-    newF.write(constructor)
-    newF.close()
+"""
+            newF.write(constructor)
+            newF.close()
 
 
-#making a Pel model class that contains an instance of the power usage enum classes and this class interacts with the Battery class
-pelPath = os.path.join(path, "PELModel.java")
-pelFile = open(pelPath, "w")
-initial = f"""package demosystem.models.pel;
-
+    # Make a PEL model class that contains an instance of the power usage enum classes and this class interacts with the Battery class
+    pelPath = os.path.join(path, "PELModel.java")
+    pelFile = open(pelPath, "w")
+    initial = f"""package demosystem.models.pel;
+    
 import gov.nasa.jpl.aerie.merlin.framework.Registrar;
 import gov.nasa.jpl.aerie.contrib.serialization.mappers.EnumValueMapper;
 import gov.nasa.jpl.aerie.contrib.serialization.mappers.DoubleValueMapper;
 import powersystem.SettableState;
 import powersystem.DerivedState;
-
+    
 /**
- * This class is generated by the pel_java_generator.py script, and it represents the PEL and contains all the
- * possible power loads of the spacecraft and registers them as resources.
- */
+* This class is generated by the pel_java_generator.py script. It represents the PEL, which should contains all the
+* possible spacecraft components that produce a power load on the spacecraft. For components whose loads are 
+* represented by different states, the component state will also be registered as a resource.
+*/
 public class PELModel {{
-
+    
     public DerivedState<Double> cbeTotalLoad;
-    public DerivedState<Double> mevTotalLoad;
-"""
+    public DerivedState<Double> mevTotalLoad;\n"""
 
-construct = f"""    public PELModel() {{
-"""
-cbeload = f"""        this.cbeTotalLoad = DerivedState.builder(Double.class)
+    construct = f"""    public PELModel() {{\n"""
+    cbeload = f"""        this.cbeTotalLoad = DerivedState.builder(Double.class)
                 .sourceStates("""
-mevload = f"""        this.mevTotalLoad = DerivedState.builder(Double.class)
+    mevload = f"""        this.mevTotalLoad = DerivedState.builder(Double.class)
                 .sourceStates("""
-cbecompute = f"""    /**
-     * Computes the CBE power load of the spacecraft so the battery will be discharged accordingly, value changes whenever
-     * the states of the instruments change
-     * @return the power load of the spacecraft
-     */
+    cbecompute = f"""    /**
+    * Computes the CBE power load of the spacecraft by rolling up power values of each power load based on load state,
+    * or for dynamic loads, power values for the load are queried directly (no state).
+    * @return the power load of the spacecraft
+    */
     public double computeCBELoad() {{
         return """
-mevcompute = f"""
+    mevcompute = f"""
     /**
-     * Computes the MEV power load of the spacecraft so the battery will be discharged accordingly, value changes whenever
-     * the states of the instruments change
-     * @return the power load of the spacecraft
-     */
+    * Computes the MEV power load of the spacecraft by rolling up power values of each power load based on load state,
+    * or for dynamic loads, power values for the load are queried directly (no state) and multiplied a MEV load factor.
+    * @return the power load of the spacecraft
+    */
     public double computeMEVLoad() {{
         return """
 
-register = f"""    public void registerStates(Registrar registrar) {{
-"""
-for x in range(len(powerList)):
-    name = powerList[x]["name"]
-    initial = initial + "\tpublic SettableState<" + name + "_State> " + name.lower() + "State;\n"
+    register = f"""    public void registerStates(Registrar registrar) {{\n"""
+    for x in range(len(powerList)):
+        name = powerList[x]["name"]
+        loadType = powerList[x]["load_type"]
+        if loadType == 'states':
+            resourceName = name.lower() + "State"
+        elif loadType == 'dynamic':
+            resourceName = name.lower() + "Power"
+        else:
+            raise Exception("No load_type in PEL defined for " + name)
 
-    stateName = powerList[x]["power_states"][0]["state"].upper()
-    construct = construct + "\t\tthis." + name.lower() + "State = SettableState.builder(" + name + "_State.class).initialValue(" + name + "_State." + stateName + ").build();\n"
-    if x == (len(powerList) - 1):
-        cbeload = cbeload + "this." + name.lower() + "State)\n\t\t\t\t.valueFunction(this::computeCBELoad)\n\t\t\t\t.build();"
-        cbecompute = cbecompute + "this." + name.lower() + "State.get().getCBELoad();\n\t}\n"
+        if loadType == 'states':
+            initial = initial + "\tpublic SettableState<" + name + "_State> " + resourceName + ";\n"
+            # Currently assuming state is initialized to first state in the list (may want to get fancier later)
+            stateName = powerList[x]["power_states"][0]["state"].upper()
+            construct = construct + "\t\tthis." + resourceName + " = SettableState.builder(" + name + "_State.class).initialValue(" + name + "_State." + stateName + ").build();\n"
+        elif loadType == 'dynamic':
+            initial = initial + "\tpublic SettableState<Double> " + resourceName + ";\n"
+            # Currently assuming dynamic load is initialized to 0.0
+            construct = construct + "\t\tthis." + resourceName + " = SettableState.builder(Double.class).initialValue(0.0).build();\n"
 
-        mevload = mevload + "this." + name.lower() + "State)\n\t\t\t\t.valueFunction(this::computeMEVLoad)\n\t\t\t\t.build();"
-        mevcompute = mevcompute + "this." + name.lower() + "State.get().getMEVLoad();\n\t}\n"
-        
-    else:
-        cbeload = cbeload + "this." + name.lower() + "State, "
-        cbecompute = cbecompute + "this." + name.lower() + "State.get().getCBELoad() + "
+        cbeload = cbeload + "this." + resourceName
+        mevload = mevload + "this." + resourceName
 
-        mevload = mevload + "this." + name.lower() + "State, "
-        mevcompute = mevcompute + "this." + name.lower() + "State.get().getMEVLoad() + "
+        if loadType == 'states':
+            cbecompute = cbecompute + "this." + resourceName + ".get().getCBELoad()"
+            mevcompute = mevcompute + "this." + resourceName + ".get().getMEVLoad()"
+            register = register + "\t\tregistrar.discrete(\"" + resourceName + "\"," + resourceName + ", new EnumValueMapper<>(" + name + "_State.class));\n"
+        elif loadType == 'dynamic':
+            cbecompute = cbecompute + "this." + resourceName + ".get()"
+            if "MEV_factor" in powerList[x]:
+                mevcompute = mevcompute + "this." + resourceName + ".get()*" + str(powerList[x]["MEV_factor"])
+            else:
+                warnings.warn("No MEV_factor specified for dynamic load " + name + ". Assume a factor of 1.0.")
+                mevcompute = mevcompute + "this." + resourceName + ".get()*1.0"
 
-        
+        if x == (len(powerList) - 1):
+            cbeload = cbeload + ")\n\t\t\t\t.valueFunction(this::computeCBELoad)\n\t\t\t\t.build();\n"
+            mevload = mevload + ")\n\t\t\t\t.valueFunction(this::computeMEVLoad)\n\t\t\t\t.build();"
+            cbecompute = cbecompute + ";\n\t}\n"
+            mevcompute = mevcompute + ";\n\t}\n"
+            construct = construct + cbeload + mevload + "\n\t}\n"
+            register = register + "\t\tregistrar.discrete(\"spacecraft.cbeLoad\", cbeTotalLoad, new DoubleValueMapper());\n" + "\t\tregistrar.discrete(\"spacecraft.mevLoad\", mevTotalLoad, new DoubleValueMapper());\n\t}\n}"
+        else:
+            cbeload = cbeload + ","
+            mevload = mevload + ","
+            cbecompute = cbecompute + " + \n\t\t\t\t"
+            mevcompute = mevcompute + " + \n\t\t\t\t"
 
-    register = register + "\t\tregistrar.discrete(\"" + name.lower() + "State\"," + name.lower() + "State, new EnumValueMapper<>(" + name + "_State.class));\n"
-
-    if x == (len(powerList) - 1):
-        construct = construct + cbeload + mevload + "\n\t}\n"
-        register = register + "\t\tregistrar.discrete(\"spacecraft.cbeLoad\", cbeTotalLoad, new DoubleValueMapper());\n" + "\t\tregistrar.discrete(\"spacecraft.mevLoad\", mevTotalLoad, new DoubleValueMapper());\n\t}\n}"
-pelFile.write(initial)
-pelFile.write(construct)
-pelFile.write(cbecompute)
-pelFile.write(mevcompute)
-pelFile.write(register)
-pelFile.close()
+    pelFile.write(initial)
+    pelFile.write(construct)
+    pelFile.write(cbecompute)
+    pelFile.write(mevcompute)
+    pelFile.write(register)
+    pelFile.close()
 
 
-
-                
-                
-            
+if __name__ == "__main__":
+    main()  # pragma: no cover
                         
-        

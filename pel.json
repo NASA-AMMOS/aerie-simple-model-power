@@ -1,7 +1,10 @@
 {
+    "name": "Demo System PEL",
+    "version": "1.0",
     "power_loads": [
         {
             "name": "GNC",
+            "load_type": "states",
             "power_states": [
                 {
                     "state": "Nominal",
@@ -32,7 +35,8 @@
             ]
         },
         {
-            "name": "Telecomm",
+            "name": "Telecom",
+            "load_type": "states",
             "power_states": [
                 {
                     "state": "Off",
@@ -64,6 +68,7 @@
         },
         {
             "name": "Avionics",
+            "load_type": "states",
             "power_states": [
                 {
                     "state": "On",
@@ -82,6 +87,7 @@
         },
         {
             "name": "Camera",
+            "load_type": "states",
             "power_states": [
                 {
                     "state": "Off",
@@ -110,6 +116,12 @@
                     }
                 }
             ]
+        },
+        {
+            "name": "Locomotion",
+            "load_type": "dynamic",
+            "units": "W",
+            "MEV_factor": 1.25
         }
     ]
 }

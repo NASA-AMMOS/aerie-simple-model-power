@@ -1,10 +1,8 @@
 package demosystem.models.pel;
-
 /**
- * This class was created by the pel_java_generator.py script and represents the state(s) of the Avionics as an enum and associates
- * a power load amount to each state.
- */
-
+* This class was created by the pel_java_generator.py script and represents the state(s) of the Avionics as an enum and associates
+* a power load amount to each state.
+*/
 public enum Avionics_State {
 	ON(100.0, 115.0);
     private final double cbeload;
@@ -13,21 +11,20 @@ public enum Avionics_State {
         this.cbeload = cbeload;  //in Watts
         this.mevload = mevload; //in Watts
     }
-
+    
     /**
-     * Function that returns the cbe load of state of the instrument.
-     * @return the power needed for that state
-     */
+    * Function that returns the cbe load of state of the instrument.
+    * @return the power needed for that state
+    */
     public double getCBELoad() {
         return cbeload;  
     }
-
+    
     /**
-     * Function that returns the mev load of state of the instrument.
-     * @return the power needed for that state
-     */
+    * Function that returns the mev load of state of the instrument.
+    * @return the power needed for that state
+    */
     public double getMEVLoad() {
         return mevload;  
     }
 }
-    
