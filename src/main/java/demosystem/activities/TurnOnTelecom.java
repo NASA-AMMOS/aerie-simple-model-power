@@ -1,6 +1,7 @@
 package demosystem.activities;
 
 import demosystem.models.pel.Telecom_State;
+import gov.nasa.jpl.aerie.contrib.streamline.modeling.discrete.DiscreteEffects;
 import gov.nasa.jpl.aerie.merlin.framework.annotations.ActivityType;
 import gov.nasa.jpl.aerie.merlin.framework.annotations.ActivityType.EffectModel;
 import gov.nasa.jpl.aerie.merlin.framework.annotations.Export.Parameter;
@@ -14,8 +15,8 @@ public class TurnOnTelecom {
 
     @EffectModel
     public void run(Mission model) {
-        model.pel.telecomState.set(Telecom_State.ON);
+        DiscreteEffects.set(model.pel.telecomState,Telecom_State.ON);
         delay(Duration.of(duration, Duration.HOURS));
-        model.pel.telecomState.set(Telecom_State.OFF);
+        DiscreteEffects.set(model.pel.telecomState,Telecom_State.OFF);
     }
 }

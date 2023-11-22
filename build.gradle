@@ -38,7 +38,7 @@ tasks.named('test') {
 
 dependencies {
   annotationProcessor 'gov.nasa.jpl.aerie:merlin-framework-processor:+'
-  implementation 'gov.nasa.jpl.aerie:contrib:+'
+  //implementation 'gov.nasa.jpl.aerie:contrib:+'
   implementation 'gov.nasa.jpl.aerie:merlin-framework:+'
   implementation 'gov.nasa.jpl.aerie:merlin-sdk:+'
   implementation 'gov.nasa.jpl.aerie:merlin-driver:+'
@@ -48,9 +48,13 @@ dependencies {
   implementation 'com.google.code.gson:gson:2.8.7'
   implementation 'com.google.mug:mug:5.3'
   implementation 'org.apache.commons:commons-csv:1.9.0'
+  implementation 'org.apache.commons:commons-math3:+'
   testImplementation 'gov.nasa.jpl.aerie:merlin-framework-junit:+'
   testImplementation 'org.junit.jupiter:junit-jupiter:+'
   testImplementation 'com.google.truth:truth:1.0.1'
   testImplementation 'com.google.truth.extensions:truth-java8-extension:1.0.1'
   testImplementation 'com.google.guava:guava-testlib:29.0-jre'
+
+  implementation files("src/main/resources/contrib.jar")
+  testImplementation files("src/main/resources/contrib.jar")
 }

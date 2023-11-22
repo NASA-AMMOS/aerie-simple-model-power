@@ -1,6 +1,7 @@
 package demosystem.activities;
 
 import demosystem.models.pel.Camera_State;
+import gov.nasa.jpl.aerie.contrib.streamline.modeling.discrete.DiscreteEffects;
 import gov.nasa.jpl.aerie.merlin.framework.annotations.ActivityType;
 import gov.nasa.jpl.aerie.merlin.framework.annotations.ActivityType.EffectModel;
 import gov.nasa.jpl.aerie.merlin.framework.annotations.Export.Parameter;
@@ -14,8 +15,8 @@ public class TurnOnCamera {
 
     @EffectModel
     public void run(Mission model) {
-        model.pel.cameraState.set(Camera_State.ON);
+        DiscreteEffects.set(model.pel.cameraState, Camera_State.ON);
         delay(Duration.of(duration, Duration.HOURS));
-        model.pel.cameraState.set(Camera_State.OFF);
+        DiscreteEffects.set(model.pel.cameraState,Camera_State.OFF);
     }
 }

@@ -1,6 +1,7 @@
 package demosystem.activities;
 
 import demosystem.Mission;
+import gov.nasa.jpl.aerie.contrib.streamline.modeling.discrete.DiscreteEffects;
 import gov.nasa.jpl.aerie.merlin.framework.annotations.ActivityType;
 import gov.nasa.jpl.aerie.merlin.framework.annotations.Export;
 import gov.nasa.jpl.aerie.merlin.protocol.types.Duration;
@@ -24,10 +25,10 @@ public class Drive {
     @ActivityType.EffectModel
     public void run(Mission model) {
         double durPerStep = duration/numSteps;
-        model.pel.locomotionPower.set(initialPower);
+        DiscreteEffects.set(model.pel.locomotionPower_CBE, initialPower);
         for (int i = 0; i < numSteps; i++) {
             delay(Duration.roundNearest(durPerStep, Duration.HOURS));
-            model.pel.locomotionPower.set(model.pel.locomotionPower.get() + powerIncrement);
+            DiscreteEffects.increase(model.pel.locomotionPower_CBE, powerIncrement);
         }
     }
 

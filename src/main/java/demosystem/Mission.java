@@ -3,7 +3,8 @@ package demosystem;
 
 import demosystem.models.pel.PELModel;
 import gov.nasa.jpl.aerie.merlin.framework.ModelActions;
-import gov.nasa.jpl.aerie.merlin.framework.Registrar;
+import gov.nasa.jpl.aerie.contrib.streamline.modeling.Registrar;
+import modeltutorial.DataModel;
 import powersystem.SettableState;
 
 import powersystem.BatteryModel;
@@ -17,9 +18,10 @@ public class Mission {
     public final BatteryModel cbebattery;
     public final BatteryModel mevbattery;
 
+    public final DataModel dataModel;
+    public final Registrar errorRegistrar;
 
-
-    public Mission(final Registrar registrar, final Configuration config) {
+    public Mission(final gov.nasa.jpl.aerie.merlin.framework.Registrar registrar, final Configuration config) {
         this.calculator = new DistAndAngleCalculator();
         ModelActions.spawn(calculator::run);
 
@@ -28,10 +30,15 @@ public class Mission {
         this.cbebattery = new BatteryModel("cbe", config.powerConfig().batteryConfig(), pel.cbeTotalLoad, array.powerProduction);
         this.mevbattery = new BatteryModel("mev", config.powerConfig().batteryConfig(), pel.mevTotalLoad, array.powerProduction);
 
-        pel.registerStates(registrar);
-        array.registerStates(registrar);
-        cbebattery.registerStates(registrar);
-        mevbattery.registerStates(registrar);
+        this.dataModel = new DataModel();
+
+        this.errorRegistrar = new Registrar(registrar, Registrar.ErrorBehavior.Log);
+
+        pel.registerStates(this.errorRegistrar);
+        array.registerStates(this.errorRegistrar);
+        cbebattery.registerStates(this.errorRegistrar);
+        mevbattery.registerStates(this.errorRegistrar);
+
     }
 }
 
