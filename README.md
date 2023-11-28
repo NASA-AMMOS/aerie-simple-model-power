@@ -36,7 +36,7 @@ The core power model is in the [power system package](src/main/java/powersystem/
 - Navigate to a directory on your local machine where you want to keep this repo and clone the repo using the following command:
 
   ```sh
-  git clone https://github.jpl.nasa.gov/yendamuri/power
+  git clone https://github.com/NASA-AMMOS/aerie-simple-model-power.git
   ```
 
 - Set `GITHUB_USER` and `GITHUB_TOKEN` environment variables to your credentials inside this directory (first you need to create a [personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic) in your GitHub account) so you can download the Aerie Maven packages from the [GitHub Maven package registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry). For example with Zsh you can update your `.zshrc` to set the variables with:
