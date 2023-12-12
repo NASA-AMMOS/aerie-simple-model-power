@@ -1,6 +1,7 @@
 package demosystem.activities;
 
 import demosystem.models.pel.GNC_State;
+import gov.nasa.jpl.aerie.contrib.streamline.modeling.discrete.DiscreteEffects;
 import gov.nasa.jpl.aerie.merlin.framework.annotations.ActivityType;
 import gov.nasa.jpl.aerie.merlin.framework.annotations.ActivityType.EffectModel;
 import gov.nasa.jpl.aerie.merlin.framework.annotations.Export.Parameter;
@@ -14,6 +15,6 @@ public class ChangeGNCState {
 
     @EffectModel
     public void run(Mission model) {
-        model.pel.gncState.set(newState);
+        DiscreteEffects.set(model.pel.gncState, newState);
     }
 }
