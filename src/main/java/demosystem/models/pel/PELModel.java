@@ -8,7 +8,6 @@ import gov.nasa.jpl.aerie.contrib.streamline.core.Resource;
 import gov.nasa.jpl.aerie.contrib.streamline.core.MutableResource;
 import gov.nasa.jpl.aerie.contrib.streamline.modeling.discrete.Discrete;
 
-import static gov.nasa.jpl.aerie.contrib.streamline.core.Resources.currentValue;
 import static gov.nasa.jpl.aerie.contrib.streamline.modeling.discrete.DiscreteResources.add;
 import static gov.nasa.jpl.aerie.contrib.streamline.modeling.discrete.monads.DiscreteResourceMonad.map;
 
@@ -22,24 +21,19 @@ public class PELModel {
     public Resource<Discrete<Double>> cbeTotalLoad;
     public Resource<Discrete<Double>> mevTotalLoad;
 	public MutableResource<Discrete<GNC_State>> gncState;
-	//public SettableState<GNC_State> gncState;
 	public Resource<Discrete<Double>> gncLoad_CBE;
 	public Resource<Discrete<Double>> gncLoad_MEV;
 
 	public MutableResource<Discrete<Telecom_State>> telecomState;
-	//public SettableState<Telecom_State> telecomState;
 	public Resource<Discrete<Double>> telecomLoad_CBE;
 	public Resource<Discrete<Double>> telecomLoad_MEV;
 	public MutableResource<Discrete<Avionics_State>> avionicsState;
 	public Resource<Discrete<Double>> avionicsLoad_CBE;
 	public Resource<Discrete<Double>> avionicsLoad_MEV;
-	//public SettableState<Avionics_State> avionicsState;
 	public MutableResource<Discrete<Camera_State>> cameraState;
 	public Resource<Discrete<Double>> cameraLoad_CBE;
 	public Resource<Discrete<Double>> cameraLoad_MEV;
-	//public SettableState<Camera_State> cameraState;
 	public MutableResource<Discrete<Double>> locomotionPower_CBE;
-	//public SettableState<Double> locomotionPower;
 	public Resource<Discrete<Double>> locomotionPower_MEV;
     public PELModel() {
 		this.gncState = MutableResource.resource( Discrete.discrete(GNC_State.NOMINAL));
