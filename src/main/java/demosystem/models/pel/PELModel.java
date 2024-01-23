@@ -1,15 +1,11 @@
 package demosystem.models.pel;
     
 import gov.nasa.jpl.aerie.contrib.streamline.modeling.Registrar;
-import gov.nasa.jpl.aerie.contrib.streamline.modeling.discrete.DiscreteResources;
 import gov.nasa.jpl.aerie.contrib.serialization.mappers.EnumValueMapper;
 import gov.nasa.jpl.aerie.contrib.serialization.mappers.DoubleValueMapper;
-import gov.nasa.jpl.aerie.merlin.framework.resources.discrete.DiscreteResource;
-import powersystem.SettableState;
-import powersystem.DerivedState;
 
 import gov.nasa.jpl.aerie.contrib.streamline.core.Resource;
-import gov.nasa.jpl.aerie.contrib.streamline.core.CellResource;
+import gov.nasa.jpl.aerie.contrib.streamline.core.MutableResource;
 import gov.nasa.jpl.aerie.contrib.streamline.modeling.discrete.Discrete;
 
 import static gov.nasa.jpl.aerie.contrib.streamline.core.Resources.currentValue;
@@ -25,44 +21,44 @@ public class PELModel {
     
     public Resource<Discrete<Double>> cbeTotalLoad;
     public Resource<Discrete<Double>> mevTotalLoad;
-	public CellResource<Discrete<GNC_State>> gncState;
+	public MutableResource<Discrete<GNC_State>> gncState;
 	//public SettableState<GNC_State> gncState;
 	public Resource<Discrete<Double>> gncLoad_CBE;
 	public Resource<Discrete<Double>> gncLoad_MEV;
 
-	public CellResource<Discrete<Telecom_State>> telecomState;
+	public MutableResource<Discrete<Telecom_State>> telecomState;
 	//public SettableState<Telecom_State> telecomState;
 	public Resource<Discrete<Double>> telecomLoad_CBE;
 	public Resource<Discrete<Double>> telecomLoad_MEV;
-	public CellResource<Discrete<Avionics_State>> avionicsState;
+	public MutableResource<Discrete<Avionics_State>> avionicsState;
 	public Resource<Discrete<Double>> avionicsLoad_CBE;
 	public Resource<Discrete<Double>> avionicsLoad_MEV;
 	//public SettableState<Avionics_State> avionicsState;
-	public CellResource<Discrete<Camera_State>> cameraState;
+	public MutableResource<Discrete<Camera_State>> cameraState;
 	public Resource<Discrete<Double>> cameraLoad_CBE;
 	public Resource<Discrete<Double>> cameraLoad_MEV;
 	//public SettableState<Camera_State> cameraState;
-	public CellResource<Discrete<Double>> locomotionPower_CBE;
+	public MutableResource<Discrete<Double>> locomotionPower_CBE;
 	//public SettableState<Double> locomotionPower;
 	public Resource<Discrete<Double>> locomotionPower_MEV;
     public PELModel() {
-		this.gncState = CellResource.cellResource( Discrete.discrete(GNC_State.NOMINAL));
+		this.gncState = MutableResource.resource( Discrete.discrete(GNC_State.NOMINAL));
 		//this.gncState = SettableState.builder(GNC_State.class).initialValue(GNC_State.NOMINAL).build();
 		this.gncLoad_CBE = map(gncState, GNC_State::getCBELoad);
 		this.gncLoad_MEV = map(gncState, GNC_State::getMEVLoad);
-		this.telecomState = CellResource.cellResource( Discrete.discrete(Telecom_State.OFF));
+		this.telecomState = MutableResource.resource( Discrete.discrete(Telecom_State.OFF));
 		//this.telecomState = SettableState.builder(Telecom_State.class).initialValue(Telecom_State.OFF).build();
 		this.telecomLoad_CBE = map(telecomState, Telecom_State::getCBELoad);
 		this.telecomLoad_MEV = map(telecomState, Telecom_State::getMEVLoad);
-		this.avionicsState = CellResource.cellResource( Discrete.discrete(Avionics_State.ON));
+		this.avionicsState = MutableResource.resource( Discrete.discrete(Avionics_State.ON));
 		//this.avionicsState = SettableState.builder(Avionics_State.class).initialValue(Avionics_State.ON).build();
 		this.avionicsLoad_CBE = map(avionicsState, Avionics_State::getCBELoad);
 		this.avionicsLoad_MEV = map(avionicsState, Avionics_State::getMEVLoad);
-		this.cameraState = CellResource.cellResource( Discrete.discrete(Camera_State.OFF));
+		this.cameraState = MutableResource.resource( Discrete.discrete(Camera_State.OFF));
 		//this.cameraState = SettableState.builder(Camera_State.class).initialValue(Camera_State.OFF).build();
 		this.cameraLoad_CBE = map(cameraState, Camera_State::getCBELoad);
 		this.cameraLoad_MEV = map(cameraState, Camera_State::getMEVLoad);
-		this.locomotionPower_CBE = CellResource.cellResource( Discrete.discrete(0.0));
+		this.locomotionPower_CBE = MutableResource.resource( Discrete.discrete(0.0));
 		this.locomotionPower_MEV = map(locomotionPower_CBE, s -> s*1.25 );
 		this.cbeTotalLoad = add(gncLoad_CBE, telecomLoad_CBE, avionicsLoad_CBE, cameraLoad_CBE, locomotionPower_CBE);
         this.mevTotalLoad = add(gncLoad_MEV, telecomLoad_MEV, avionicsLoad_MEV, cameraLoad_MEV, locomotionPower_CBE);

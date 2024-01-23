@@ -6,9 +6,9 @@ This repository provides a simple, configurable spacecraft power model for use w
 
 Interested in giving the power model a quick spin? We've pre-built a very simple example spacecraft model, demosystem, that uses the power model. This model has a few activities in it that turn on/off various spacecraft loads. To try out this model, simply load [demosystem.jar](demosystem.jar) into Aerie. If you have never used Aerie before and need some help getting it deployed and uploading a model, start [here](https://nasa-ammos.github.io/aerie-docs/introduction/#fast-track).
 
-Once you have loaded [demosystem.jar](demosystem.jar) into Aerie, make a plan with a time range of your choosing (a plan length of a day should be reasonable). Once you have created a plan, add a couple of activities to it (e.g. TurnOnCamera) and hit the simulate button. Once the simulation completes you should see a green check appear next to the Simulation icon, and viola, you have successfully run the power model!
+Once you have loaded [demosystem.jar](demosystem.jar) into Aerie, make a plan with a time range of your choosing (a plan length of a day should be reasonable). Once you have created a plan, add a couple of activities to it (e.g. TurnOnCamera) and hit the simulate button. Once the simulation completes you should see a green check appear next to the Simulation icon and timelines populate in the view below. Viola! You have successfully run the power model!
 
-To actually see the results of the simulation you ran, you can load a pre-built [basic power model view](PowerModelBasicView.json) that will place a number of different resources on to the timeline for (power load, battery state of charge, etc.). 
+To see the results of the simulation you ran in a slightly more organized manner, you can load a pre-built [basic power model view](PowerModelBasicView.json) that will order a subset of the resources on to the timeline for (power load, battery state of charge, etc.). 
 
 There are number of configuration variables available in the "Simulation" pane that you can adjust to produce different behavior with the power model. Feel free to play around with these configurations and re-simulate to see how the results change.
 

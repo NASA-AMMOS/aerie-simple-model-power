@@ -1,6 +1,6 @@
 package powersystem;
 
-import gov.nasa.jpl.aerie.contrib.streamline.core.CellResource;
+import gov.nasa.jpl.aerie.contrib.streamline.core.MutableResource;
 import gov.nasa.jpl.aerie.contrib.streamline.core.Resource;
 import gov.nasa.jpl.aerie.contrib.streamline.modeling.Registrar;
 import gov.nasa.jpl.aerie.contrib.streamline.modeling.discrete.Discrete;
@@ -17,11 +17,11 @@ import static gov.nasa.jpl.aerie.contrib.streamline.modeling.discrete.monads.Dis
 
 public class GenericSolarArray {
     public final double SOLAR_INTENSITY_AT_EARTH = 1360.8; //solar irradiance from the sun at 1 AU (W/m^2)
-    public CellResource<Discrete<ArrayDeploymentStates>> solarArrayDeploymentState; //State of solar array deployment
+    public MutableResource<Discrete<ArrayDeploymentStates>> solarArrayDeploymentState; //State of solar array deployment
     public Resource<Discrete<Double>> powerProduction;   //total power produced by the solar arrays (W)
     public Resource<Discrete<Double>> solarDistance;  //spacecraft distance from the Sun (AU)
     public Resource<Discrete<Double>> arrayToSunAngle;  //angle between the Sun and the array surface normal vector due to spacecraft orientation (deg)
-    public CellResource<Discrete<Double>> arrayCellArea;  //area of the solar arrays containing solar cells (m^2) that can produce power
+    public MutableResource<Discrete<Double>> arrayCellArea;  //area of the solar arrays containing solar cells (m^2) that can produce power
     public SolarArraySimConfig simConfig;
     public double staticArrayLosses; // Array losses that we do not expect to change with sim time
 
@@ -33,10 +33,10 @@ public class GenericSolarArray {
      */
     public GenericSolarArray(SolarArraySimConfig arraySimConfig, Resource<Discrete<Double>> solarDistance, Resource<Discrete<Double>> arrayToSunAngle) {
         this.simConfig = arraySimConfig;
-        this.solarArrayDeploymentState = CellResource.cellResource( Discrete.discrete(simConfig.deploymentState()));
+        this.solarArrayDeploymentState = MutableResource.resource( Discrete.discrete(simConfig.deploymentState()));
         this.solarDistance = solarDistance;
         this.arrayToSunAngle = arrayToSunAngle;
-        this.arrayCellArea =  CellResource.cellResource( Discrete.discrete( simConfig.arrayMechArea() * simConfig.packingFactor()));
+        this.arrayCellArea =  MutableResource.resource( Discrete.discrete( simConfig.arrayMechArea() * simConfig.packingFactor()));
 
         this.powerProduction = bind(this.solarDistance, distance ->
                                bind(this.arrayCellArea, cellArea ->
