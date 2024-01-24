@@ -16,6 +16,10 @@ There are number of configuration variables available in the "Simulation" pane t
 
 The core power model is in the [power system package](src/main/java/powersystem/) in this repo. This is what the mission modeler would integrate into their own spacecraft model if they needed a power model. The [demosystem package](src/main/java/demosystem/) in this repo is an example to show how a mission modeler can integrate this power model into their model, specifically by changing their package.info file and their top-level mission class.
 
+## Power Equipment List (PEL) 
+
+Example activities within the [demosystem package](src/main/java/demosystem/) effect the power model by making state or load changes on hardware defined within the [PEL Model Package](src/main/java/demosystem/models/pel). A simple python script, [pel_java_generator.py](pel_java_generator.py), included in this repo can generate all of the files within that package for you based on the [pel.json](pel.json) file. If you want to add new/different loads, just updated the `power_loads` property in that file.
+
 ## Prerequisites
 
 - Install [OpenJDK Temurin LTS](https://adoptium.net/temurin/releases/?version=19). If you're on macOS, you can install [brew](https://brew.sh/) instead and then use the following command to install JDK 19:
