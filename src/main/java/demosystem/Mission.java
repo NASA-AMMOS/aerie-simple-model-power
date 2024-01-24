@@ -4,8 +4,6 @@ package demosystem;
 import demosystem.models.pel.PELModel;
 import gov.nasa.jpl.aerie.merlin.framework.ModelActions;
 import gov.nasa.jpl.aerie.contrib.streamline.modeling.Registrar;
-import modeltutorial.DataModel;
-import powersystem.SettableState;
 
 import powersystem.BatteryModel;
 import powersystem.GenericSolarArray;
@@ -18,7 +16,6 @@ public class Mission {
     public final BatteryModel cbebattery;
     public final BatteryModel mevbattery;
 
-    public final DataModel dataModel;
     public final Registrar errorRegistrar;
 
     public Mission(final gov.nasa.jpl.aerie.merlin.framework.Registrar registrar, final Configuration config) {
@@ -29,8 +26,6 @@ public class Mission {
         this.array = new GenericSolarArray(config.powerConfig().solarArrayConfig(), calculator.distance, calculator.angle);
         this.cbebattery = new BatteryModel("cbe", config.powerConfig().batteryConfig(), pel.cbeTotalLoad, array.powerProduction);
         this.mevbattery = new BatteryModel("mev", config.powerConfig().batteryConfig(), pel.mevTotalLoad, array.powerProduction);
-
-        this.dataModel = new DataModel();
 
         this.errorRegistrar = new Registrar(registrar, Registrar.ErrorBehavior.Log);
 

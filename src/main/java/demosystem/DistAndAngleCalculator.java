@@ -1,23 +1,22 @@
 package demosystem;
-import gov.nasa.jpl.aerie.contrib.streamline.core.CellResource;
+import gov.nasa.jpl.aerie.contrib.streamline.core.MutableResource;
 import gov.nasa.jpl.aerie.contrib.streamline.modeling.discrete.Discrete;
 import gov.nasa.jpl.aerie.contrib.streamline.modeling.discrete.DiscreteEffects;
 import gov.nasa.jpl.aerie.merlin.framework.ModelActions;
 import gov.nasa.jpl.aerie.merlin.protocol.types.Duration;
 import static gov.nasa.jpl.aerie.merlin.framework.ModelActions.delay;
-import powersystem.SettableState;
 
 
 /**
  * This class updates the distance and arrayToSunAngle automatically through daemon tasks.
  */
 public class DistAndAngleCalculator {
-    public CellResource<Discrete<Double>> distance;  //distance of spacecraft from the Sun in AU
-    public CellResource<Discrete<Double>> angle;  //arrayToSunAngle between the suns rays and the normal vector of the surface of the solar array (because of the spacecraft's orientation)
+    public MutableResource<Discrete<Double>> distance;  //distance of spacecraft from the Sun in AU
+    public MutableResource<Discrete<Double>> angle;  //arrayToSunAngle between the suns rays and the normal vector of the surface of the solar array (because of the spacecraft's orientation)
 
     public DistAndAngleCalculator() {
-        this.distance = CellResource.cellResource( Discrete.discrete(1.0) );
-        this.angle = CellResource.cellResource( Discrete.discrete(-90.0) );
+        this.distance = MutableResource.resource( Discrete.discrete(1.0) );
+        this.angle = MutableResource.resource( Discrete.discrete(-90.0) );
     }
 
     /**
