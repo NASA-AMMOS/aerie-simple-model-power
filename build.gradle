@@ -4,7 +4,7 @@ plugins {
 
 java {
   toolchain {
-    languageVersion = JavaLanguageVersion.of(19)
+    languageVersion = JavaLanguageVersion.of(21)
   }
 }
 
@@ -38,12 +38,11 @@ tasks.named('test') {
 
 dependencies {
   annotationProcessor 'gov.nasa.jpl.aerie:merlin-framework-processor:+'
-  //implementation 'gov.nasa.jpl.aerie:contrib:+'
+  implementation 'gov.nasa.jpl.aerie:contrib:+'
   implementation 'gov.nasa.jpl.aerie:merlin-framework:+'
   implementation 'gov.nasa.jpl.aerie:merlin-sdk:+'
   implementation 'gov.nasa.jpl.aerie:merlin-driver:+'
   implementation 'gov.nasa.jpl.aerie:parsing-utilities:+'
-  //implementation 'gov.nasa.jpl.aerie:scheduler-driver:+'
   implementation 'com.google.guava:guava:29.0-jre'
   implementation 'com.google.code.gson:gson:2.8.7'
   implementation 'com.google.mug:mug:5.3'
@@ -54,7 +53,4 @@ dependencies {
   testImplementation 'com.google.truth:truth:1.0.1'
   testImplementation 'com.google.truth.extensions:truth-java8-extension:1.0.1'
   testImplementation 'com.google.guava:guava-testlib:29.0-jre'
-
-  implementation files("src/main/resources/contrib.jar")
-  testImplementation files("src/main/resources/contrib.jar")
 }

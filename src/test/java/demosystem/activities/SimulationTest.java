@@ -19,9 +19,6 @@ public class SimulationTest {
 
         final Map<ActivityDirectiveId, ActivityDirective> schedule = new HashMap<>();
 
-        final String tle1 = "1 25544U 98067A   23160.52920207  .00014621  00000+0  25792-3 0  9990";
-        final String tle2 = "2 25544  51.6427   6.4943 0005441  65.9777  22.9778 15.50621294400608";
-
 //        schedule.put(new ActivityDirectiveId(1L), new ActivityDirective(
 //                Duration.of(1, Duration.HOURS),
 //                "TurnOnCamera",
@@ -49,7 +46,8 @@ public class SimulationTest {
                 simulationStartTime,
                 simulationDuration,
                 simulationStartTime,
-                simulationDuration
+                simulationDuration,
+                () -> { return false; }
         );
     }
 

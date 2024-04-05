@@ -7,6 +7,7 @@ import gov.nasa.jpl.aerie.merlin.framework.annotations.Export.Parameter;
 import gov.nasa.jpl.aerie.merlin.protocol.types.Duration;
 import demosystem.Mission;
 import powersystem.ArrayDeploymentStates;
+import powersystem.GenericSolarArray;
 
 @ActivityType("SolarArrayDeployment")
 public class SolarArrayDeployment {
@@ -16,8 +17,10 @@ public class SolarArrayDeployment {
 
     @EffectModel
     public void run(Mission model) {
-        model.array.setSolarArrayDeploymentState(ArrayDeploymentStates.DEPLOYING);
-        delay(Duration.roundNearest(deployDuration, Duration.MINUTES));
-        model.array.setSolarArrayDeploymentState(ArrayDeploymentStates.DEPLOYED);
+        if (model.powerSource instanceof GenericSolarArray) {
+            ((GenericSolarArray) model.powerSource).setSolarArrayDeploymentState(ArrayDeploymentStates.DEPLOYING);
+            delay(Duration.roundNearest(deployDuration, Duration.MINUTES));
+            ((GenericSolarArray) model.powerSource).setSolarArrayDeploymentState(ArrayDeploymentStates.DEPLOYED);
+        }
     }
 }

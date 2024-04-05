@@ -14,9 +14,12 @@ public class DistAndAngleCalculator {
     public MutableResource<Discrete<Double>> distance;  //distance of spacecraft from the Sun in AU
     public MutableResource<Discrete<Double>> angle;  //arrayToSunAngle between the suns rays and the normal vector of the surface of the solar array (because of the spacecraft's orientation)
 
+    public MutableResource<Discrete<Double>> eclipseFactor;  // Fraction of the Sun that can be viewed during a partial eclipse (between 0 and 1)
+
     public DistAndAngleCalculator() {
         this.distance = MutableResource.resource( Discrete.discrete(1.0) );
         this.angle = MutableResource.resource( Discrete.discrete(-90.0) );
+        this.eclipseFactor = MutableResource.resource( Discrete.discrete(1.0) );
     }
 
     /**

@@ -1,7 +1,9 @@
 @MissionModel(model = Mission.class)
 @WithMappers(BasicValueMappers.class)
+@WithMappers(CustomValueMappers.class)
 @WithConfiguration(Configuration.class)
 
+// Comment out SolarArrayDeployment when using RTG model
 @WithActivityType(SolarArrayDeployment.class)
 @WithActivityType(TurnOnCamera.class)
 @WithActivityType(TurnOnTelecom.class)
