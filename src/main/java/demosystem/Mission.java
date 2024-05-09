@@ -44,7 +44,9 @@ public class Mission {
         mevbattery.registerStates(this.errorRegistrar);
 
         // Spawn daemon task to compute RtgPower at a fixed sample rate
-        spawn(((RtgPowerProduction)this.powerSource)::sampleRtgPower);
+        if (config.powerConfig().powerSourceConfig().sampleRtgPower()) {
+            spawn(((RtgPowerProduction) this.powerSource)::sampleRtgPower);
+        }
 
     }
 }
