@@ -4,7 +4,14 @@ This repository provides a simple, configurable spacecraft power model for use w
 
 ## Quick Start
 
-Interested in giving the power model a quick spin? We've pre-built a very simple example spacecraft model, demosystem, that uses the power model. This model has a few activities in it that turn on/off various spacecraft loads. To try out this model, simply load [demosystem.jar](demosystem.jar) into Aerie. If you have never used Aerie before and need some help getting it deployed and uploading a model, start [here](https://nasa-ammos.github.io/aerie-docs/introduction/#fast-track).
+Interested in giving the power model a quick spin? We've pre-built a very simple example spacecraft model, demosystem, that uses the power model. 
+This model has a few activities in it that turn on/off various spacecraft loads. To try out this model, simply load [demosystem.jar](demosystem.jar) into Aerie. 
+If you have never used Aerie before and need some help getting it deployed and uploading a model, start [here](https://nasa-ammos.github.io/aerie-docs/introduction/#fast-track). Or, if you already have Docker installed,
+you should be able to start up Aerie by navigating to the top directory of this repo and issuing the following command.
+
+ ```sh
+  docker compose up
+  ```
 
 Once you have loaded [demosystem.jar](demosystem.jar) into Aerie, make a plan with a time range of your choosing (a plan length of a day should be reasonable). Once you have created a plan, add a couple of activities to it (e.g. TurnOnCamera) and hit the simulate button. Once the simulation completes you should see a green check appear next to the Simulation icon and timelines populate in the view below. Viola! You have successfully run the power model!
 
@@ -14,11 +21,11 @@ There are number of configuration variables available in the "Simulation" pane t
 
 ## Organization
 
-The core power model is in the [power system package](src/main/java/powersystem/) in this repo. This is what the mission modeler would integrate into their own spacecraft model if they needed a power model. The [demosystem package](src/main/java/demosystem/) in this repo is an example to show how a mission modeler can integrate this power model into their model, specifically by changing their package.info file and their top-level mission class.
+The core power model is in the [power system package](missionmodel/src/main/java/powersystem/) in this repo. This is what the mission modeler would integrate into their own spacecraft model if they needed a power model. The [demosystem package](missionmodel/src/main/java/demosystem/) in this repo is an example to show how a mission modeler can integrate this power model into their model, specifically by changing their package.info file and their top-level mission class.
 
 ## Power Equipment List (PEL) 
 
-Example activities within the [demosystem package](src/main/java/demosystem/) effect the power model by making state or load changes on hardware defined within the [PEL Model Package](src/main/java/demosystem/models/pel). A simple python script, [pel_java_generator.py](pel_java_generator.py), included in this repo can generate all of the files within that package for you based on the [pel.json](pel.json) file. If you want to add new/different loads, just updated the `power_loads` property in that file.
+Example activities within the [demosystem package](missionmodel/src/main/java/demosystem/) effect the power model by making state or load changes on hardware defined within the [PEL Model Package](missionmodel/src/main/java/demosystem/models/pel). A simple python script, [pel_java_generator.py](pel_java_generator.py), included in this repo can generate all of the files within that package for you based on the [pel.json](pel.json) file. If you want to add new/different loads, just updated the `power_loads` property in that file.
 
 ## Prerequisites
 
