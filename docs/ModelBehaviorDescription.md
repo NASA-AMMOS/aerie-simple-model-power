@@ -27,6 +27,24 @@ $L_{pointing} = cos(\theta)$
 - Degradation loss is currently not implemented and assumed to be 1.0
 - While solar array operating temperature also plays a role in array power output, this model currently does take this effect into account.
 
+## RTG
+
+The power delivered by a radioisotope thermoelectric generator (RTG) is computed via a simple exponential decay function:
+
+$P_s(t) = NP_{t0}e^{-k (t - t0)}$
+
+where 
+
+$P_s(t1)$ is the source power at time t delivered to the spacecraft $(W)$ \
+$N$ is the number of RTGs \
+$P_{t0}$ is the Beginning of Life (BOL) power per RTG $(W)$ \
+$k$ is the percentage decay rate per year \
+$t0$ is the time at BOL power
+
+#### Notes
+
+- The source power for RTGs can either be sampled at a configurable rate (e.g. 1x/day) or dynamically to maintain a given relative error (currently hardcoded to 1e-4) 
+
 ## Battery
 
 The battery model provided describes the behavior of a simple rechargeable ("secondary") battery that provides energy to the spacecraft when insufficient power is available from the power source (e.g. solar arrays).
