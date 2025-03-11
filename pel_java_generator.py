@@ -9,7 +9,7 @@ def main():
     #creates the enum classes for each of the power usages in the json file
     file = open("pel.json", "r")
     data = json.load(file)
-    path = "src/main/java/demosystem/models/pel"
+    path = "missionmodel/src/main/java/demosystem/models/pel"
     powerList = data["power_loads"]
     for item in powerList:
         oName = item["name"]

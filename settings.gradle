@@ -1,2 +1,2 @@
-rootProject.name = 'demosystem'
-include('src')
+rootProject.name = 'aerie-simple-power-model'
+include('missionmodel')
