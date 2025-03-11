@@ -4,7 +4,9 @@ import demosystem.Configuration;
 import demosystem.generated.GeneratedModelType;
 import gov.nasa.jpl.aerie.merlin.driver.*;
 import gov.nasa.jpl.aerie.merlin.protocol.types.Duration;
-import gov.nasa.jpl.aerie.merlin.protocol.types.SerializedValue;
+import gov.nasa.jpl.aerie.types.ActivityDirective;
+import gov.nasa.jpl.aerie.types.ActivityDirectiveId;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
@@ -19,19 +21,11 @@ public class SimulationTest {
 
         final Map<ActivityDirectiveId, ActivityDirective> schedule = new HashMap<>();
 
-//        schedule.put(new ActivityDirectiveId(1L), new ActivityDirective(
-//                Duration.of(1, Duration.HOURS),
-//                "TurnOnCamera",
-//                Map.of("duration", SerializedValue.of(1)),
-//                null,
-//                true
-//        ));
-
-
         final var results = simulate(Configuration.defaultConfiguration(), simulationStartTime, simulationDuration, schedule);
 //        for (final var segment : results.discreteProfiles.get("/cameraState").getRight()) {
 //            System.out.println(segment.extent() + " " + segment.dynamics());
-//        }
+//
+        Assertions.assertNotNull(results);
     }
 
     public SimulationResults simulate(
