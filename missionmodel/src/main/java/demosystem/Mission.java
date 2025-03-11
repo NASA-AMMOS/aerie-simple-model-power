@@ -31,8 +31,8 @@ public class Mission {
         // Initialize Power States and Loads
         this.pel = new PELModel();
         // Initialize Power Source
-        //this.powerSource = new GenericSolarArray(config.powerConfig().powerSourceConfig(), calculator.distance, calculator.angle, calculator.eclipseFactor);
-        this.powerSource = new RtgPowerProduction(config.powerConfig().powerSourceConfig(), planStart);
+        this.powerSource = new GenericSolarArray(config.powerConfig().powerSourceConfig(), calculator.distance, calculator.angle, calculator.eclipseFactor);
+        //this.powerSource = new RtgPowerProduction(config.powerConfig().powerSourceConfig(), planStart);
         this.cbebattery = new BatteryModel("cbe", config.powerConfig().batteryConfig(), pel.cbeTotalLoad, powerSource.getPowerProduction());
         this.mevbattery = new BatteryModel("mev", config.powerConfig().batteryConfig(), pel.mevTotalLoad, powerSource.getPowerProduction());
 
@@ -44,9 +44,9 @@ public class Mission {
         mevbattery.registerStates(this.errorRegistrar);
 
         // Spawn daemon task to compute RtgPower at a fixed sample rate
-        if (config.powerConfig().powerSourceConfig().sampleRtgPower()) {
-            spawn(((RtgPowerProduction) this.powerSource)::sampleRtgPower);
-        }
+//        if (config.powerConfig().powerSourceConfig().sampleRtgPower()) {
+//            spawn(((RtgPowerProduction) this.powerSource)::sampleRtgPower);
+//        }
 
     }
 }
