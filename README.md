@@ -1,3 +1,13 @@
+
+
+> [!WARNING]
+> **This repository is deprecated and no longer maintained.**
+>
+> PlanDev examples have moved to the consolidated [`NASA-AMMOS/plandev-examples`](https://github.com/NASA-AMMOS/plandev-examples) repository.
+>
+> This example has been replaced by the [`power`](https://github.com/NASA-AMMOS/plandev-examples/tree/main/libraries/power) example in the new repository.
+
+
 # Aerie Simple Power Model
 
 This repository provides a simple, configurable spacecraft power model for use within the [Aerie framework](https://github.com/NASA-AMMOS/aerie). The power model includes basic components to represent a power source (e.g. solar arrays), spacecraft power loads (represented as a power equipment list), and energy storage (e.g. battery). A detailed description of the equations and variables that drive the model behavior is available [here](docs/ModelBehaviorDescription.md).
