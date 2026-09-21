@@ -14,7 +14,7 @@ public record PowerModelSimConfig(BatterySimConfig batteryConfig,
     public static final SolarArraySimConfig DEFAULT_SOLAR_ARRAY_CONFIG = SolarArraySimConfig.defaultConfiguration();
 
     // Power Configuration to Use for RTG Model
-    // public static final RtgSimConfig DEFAULT_RTG_SIM_CONFIG = RtgSimConfig.defaultConfiguration();
+    //public static final RtgSimConfig DEFAULT_RTG_SIM_CONFIG = RtgSimConfig.defaultConfiguration();
 
     public static @Template PowerModelSimConfig defaultConfiguration() {
         return new PowerModelSimConfig(DEFAULT_BATTERY_CONFIG,
